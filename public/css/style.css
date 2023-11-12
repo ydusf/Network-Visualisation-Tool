@@ -1,0 +1,51 @@
+:root {
+  --p-colour: #333333;
+  --s-colour: #555555;
+  --a-colour: #007acc;
+  --bg-colour: black;
+  --bs-font-size: 1rem;
+  --md-font-size: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+  --lg-font-size: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
+  --xl-large-font-size: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+  --border-radius: 8px;
+  --box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: white;
+} */
+
+/* footer {
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: 20px;
+} */
+
+/* .header {
+} */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.network-container {
+}
+
+.toolbar--bar {
+  background-color: rgb(22, 47, 90);
+}
+
+.network {
+  background-color: rgb(7, 13, 41);
+}
+
+.analytics--bar {
+  background-color: rgb(18, 225, 185);
+}
+
+/* background-color: rgb(22, 47, 90); */
+/* background-color: rgb(18, 225, 185); */
