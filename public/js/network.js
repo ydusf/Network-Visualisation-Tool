@@ -112,8 +112,8 @@ graph.links = generateLinks(graph.nodes);
 function generateLinks(nodes) {
   let links = [];
 
-  for (let i = 0; i < nodes.length; i += 2) {
-    for (let j = i + 1; j < nodes.length; j += 5) {
+  for (let i = 0; i < nodes.length; i += 1) {
+    for (let j = i + 1; j < nodes.length; j += 15) {
       links.push({ source: nodes[i].name, target: nodes[j].name });
     }
   }
@@ -133,7 +133,7 @@ let simulation = d3
       .links(graph.links)
   )
 
-  .force("charge", d3.forceManyBody().strength(-30))
+  .force("charge", d3.forceManyBody().strength(-15))
   .force("center", d3.forceCenter(width / 2, height / 2))
   .on("tick", ticked);
 

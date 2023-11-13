@@ -63,6 +63,7 @@ body {
   height: 100%;
   width: 250px;
   background-color: var(--s-colour);
+  position: relative;
 }
 
 .toolbar--import h2 {
@@ -101,12 +102,15 @@ body {
 }
 
 .toolbar--analytics img {
-  width: 100%;
+  width: 80%;
   height: auto;
 }
 
 .toolbar--drag {
-  float: right;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
   color: var(--a-colour);
   background-color: var(--s-colour);
   padding: 5px 10px;
@@ -128,7 +132,7 @@ body {
 
 .analytics {
   background-color: var(--a-colour);
-  height: 150px;
+  height: auto;
 }
 
 .analytics--title,
@@ -160,7 +164,22 @@ body {
   stroke-width: 3;
 }
 
+.index-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .index-container button {
   color: var(--a-colour);
-  background-color: var(--p-colour);
+  margin-top: 20px;
+  background: transparent;
+  padding: 15px 40px;
+  font-size: var(--bs-font-size);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid var(--a-colour);
+  transition: background-color 0.3s, color 0.3s;
+  margin: 0px 40px;
 }
