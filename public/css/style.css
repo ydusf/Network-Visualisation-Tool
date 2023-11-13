@@ -1,8 +1,13 @@
+@font-face {
+  font-family: myFont;
+  src: url("NeueMachina-Regular.otf");
+}
+
 :root {
-  --p-colour: #333333;
-  --s-colour: #555555;
-  --a-colour: #007acc;
-  --bg-colour: black;
+  --p-colour: rgb(7, 13, 41);
+  --s-colour: rgb(22, 47, 90);
+  --a-colour: rgb(18, 225, 185);
+  --text-colour: white;
   --bs-font-size: 1rem;
   --md-font-size: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
   --lg-font-size: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
@@ -11,12 +16,13 @@
   --box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* * {
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   color: white;
-} */
+  font-family: myFont;
+}
 
 /* footer {
   text-align: center;
@@ -24,28 +30,137 @@
   margin-bottom: 20px;
 } */
 
-/* .header {
-} */
-
 body {
+  height: 100%;
   margin: 0;
-  font-family: Arial, sans-serif;
+}
+
+.index-container {
+  background: url("/img/backgrounds/index_bg.png");
+  background-size: cover;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.login-container {
+  background: url("/img/backgrounds/login_bg.png");
+  background-size: cover;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .network-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 2fr 1fr;
+  height: 100vh;
 }
 
-.toolbar--bar {
-  background-color: rgb(22, 47, 90);
+.toolbar {
+  grid-row: span 2;
+  height: 100%;
+  width: 250px;
+  background-color: var(--s-colour);
+}
+
+.toolbar--import h2 {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-colour);
+  font-size: var(--md-font-size);
+}
+
+.toolbar--import button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 15px 40px;
+  font-size: var(--bs-font-size);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--p-colour);
+  border: none;
+  background-color: var(--a-colour);
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toolbar--import button:hover {
+  background-color: var(--p-colour);
+  color: var(--text-colour);
+}
+
+.toolbar--analytics h2 {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  color: var(--text-colour);
+  font-size: var(--md-font-size);
+}
+
+.toolbar--analytics img {
+  width: 100%;
+  height: auto;
+}
+
+.toolbar--drag {
+  float: right;
+  color: var(--a-colour);
+  background-color: var(--s-colour);
+  padding: 5px 10px;
+  border-radius: 25px;
+  font-size: var(--md-font-size);
+  font-weight: bold;
+  border: 2px solid var(--a-colour);
+  transition: background-color 0.3s;
+}
+
+.toolbar--drag:hover {
+  background-color: var(--p-colour);
+  cursor: w-resize;
 }
 
 .network {
-  background-color: rgb(7, 13, 41);
+  background-color: var(--p-colour);
 }
 
-.analytics--bar {
-  background-color: rgb(18, 225, 185);
+.analytics {
+  background-color: var(--a-colour);
+  height: 150px;
 }
 
-/* background-color: rgb(22, 47, 90); */
-/* background-color: rgb(18, 225, 185); */
+.analytics--title,
+.analytics--info {
+  text-align: left;
+  padding: 10px 20px;
+  color: var(--p-colour);
+  font-size: var(--md-font-size);
+}
+
+.analytics--info {
+  font-size: var(--bs-font-size);
+}
+
+.network-container,
+.grid--item {
+  text-align: center;
+}
+
+.node {
+  fill: rgb(18, 225, 185);
+  stroke: white;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+.link {
+  stroke: white;
+  stroke-opacity: 0.8;
+  stroke-width: 3;
+}
+
+.index-container button {
+  color: var(--a-colour);
+  background-color: var(--p-colour);
+}

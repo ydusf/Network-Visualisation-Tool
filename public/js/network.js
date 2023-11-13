@@ -112,19 +112,15 @@ graph.links = generateLinks(graph.nodes);
 function generateLinks(nodes) {
   let links = [];
 
-  for (let i = 0; i < nodes.length; i += 1) {
-    for (
-      let j = i + 1;
-      j < nodes.length;
-      j += Math.trunc(Math.random() * nodes.length)
-    ) {
+  for (let i = 0; i < nodes.length; i += 2) {
+    for (let j = i + 1; j < nodes.length; j += 5) {
       links.push({ source: nodes[i].name, target: nodes[j].name });
     }
   }
 
   return links;
 }
-const dataFilePath = "/js/data.json";
+// const dataFilePath = "/data/data.json";
 
 // d3.json(dataFilePath).then(function (graph) {
 let simulation = d3
@@ -137,19 +133,18 @@ let simulation = d3
       .links(graph.links)
   )
 
-  .force("charge", d3.forceManyBody().strength(-50))
+  .force("charge", d3.forceManyBody().strength(-30))
   .force("center", d3.forceCenter(width / 2, height / 2))
   .on("tick", ticked);
 
 let link = svg
   .append("g")
-  .attr("class", "links")
+  .attr("class", "link")
   .selectAll("line")
   .data(graph.links)
   .enter()
   .append("line")
-  .attr("stroke-width", (d) => 3)
-  .style("stroke", "#1C2E57");
+  .attr("class", "link");
 
 let node = svg
   .append("g")
@@ -157,9 +152,28 @@ let node = svg
   .data(graph.nodes)
   .enter()
   .append("circle")
+  .attr("class", "node")
   .attr("r", 6)
-  .attr("fill", (d) => "#68DEBB")
-  .attr("stroke", "white");
+  .call(
+    d3.drag().on("start", dragstart).on("drag", dragged).on("end", dragend)
+  );
+
+function dragstart(e, d) {
+  if (!e.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(e, d) {
+  d.fx = e.x;
+  d.fy = e.y;
+}
+
+function dragend(e, d) {
+  if (!e.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
 
 function ticked() {
   link
