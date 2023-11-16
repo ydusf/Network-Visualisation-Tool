@@ -33,6 +33,19 @@
 body {
   height: 100%;
   margin: 0;
+  background-color: var(--p-colour);
+}
+
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--a-colour);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--p-colour);
 }
 
 .index-container {
@@ -53,15 +66,12 @@ body {
 
 .network-container {
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: 2fr 1fr;
-  height: 100vh;
+  grid-template-columns: 1fr 3fr;
 }
 
 .toolbar {
-  grid-row: span 2;
-  height: 100%;
-  width: 250px;
+  height: 100vh;
+  width: clamp(250px, 15vw + 50px, 25vw);
   background-color: var(--s-colour);
   position: relative;
 }
@@ -128,9 +138,11 @@ body {
 
 .network {
   background-color: var(--p-colour);
+  height: 100vh;
+  width: auto;
 }
 
-.analytics {
+/* .analytics {
   background-color: var(--a-colour);
   height: auto;
 }
@@ -145,15 +157,17 @@ body {
 
 .analytics--info {
   font-size: var(--bs-font-size);
-}
+} */
 
 .network-container,
 .grid--item {
   text-align: center;
+  align-items: center;
 }
 
 .node {
-  fill: rgb(18, 225, 185);
+  /* fill: rgb(18, 225, 185); */
+  fill: transparent;
   stroke: white;
   stroke-width: 2px;
   cursor: pointer;
