@@ -7,6 +7,7 @@ import {
   dragend,
 } from "./network/utils.js";
 import { handleResize } from "./network/responsive.js";
+import { boltInit } from "./animations/bolt.js";
 const dataFilePath = "/data/data.json";
 function visualiseNetwork(graph, subset) {
   const svg = d3.select("svg");
@@ -34,6 +35,7 @@ loadData(dataFilePath)
   .then(function (data) {
     const popular = ["ANAKIN"];
     visualiseNetwork(data, popular);
+    // boltInit();
   })
   .catch((error) => {
     console.error("Error fetching or converting the file:", error);

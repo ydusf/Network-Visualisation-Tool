@@ -1,39 +1,48 @@
+/* .toolbar-drag {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  color: var(--accent-color);
+  background-color: var(--secondary-color);
+  padding: 5px 10px;
+  border-radius: 25px;
+  font-size: var(--md-font-size);
+  font-weight: bold;
+  border: 2px solid var(--accent-color);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.toolbar-drag:hover {
+  background-color: var(--primary-color);
+  cursor: w-resize;
+  transform: scale(1.1);
+} */
+
 @font-face {
   font-family: myFont;
   src: url("NeueMachina-Regular.otf");
 }
 
 :root {
-  --p-colour: rgb(7, 13, 41);
-  --s-colour: rgb(22, 47, 90);
-  --a-colour: rgb(18, 225, 185);
-  --text-colour: white;
-  --bs-font-size: 1rem;
+  font-family: myFont;
+  font-size: 16px;
   --md-font-size: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
   --lg-font-size: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
   --xl-large-font-size: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+  --primary-color: rgb(7, 13, 41);
+  --secondary-color: rgb(22, 47, 90);
+  --accent-color: rgb(18, 225, 185);
+  --text-color: white;
   --border-radius: 8px;
   --box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+  --transition-speed: 450ms;
 }
-
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  color: white;
-  font-family: myFont;
-}
-
-/* footer {
-  text-align: center;
-  margin-top: auto;
-  margin-bottom: 20px;
-} */
 
 body {
-  height: 100%;
+  color: black;
+  background-color: var(--primary-color);
   margin: 0;
-  background-color: var(--p-colour);
+  padding: 0;
 }
 
 body::-webkit-scrollbar {
@@ -41,159 +50,131 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-track {
-  background: var(--a-colour);
+  background: var(--accent-color);
 }
 
 body::-webkit-scrollbar-thumb {
-  background: var(--p-colour);
+  background: var(--primary-color);
 }
 
-.index-container {
-  background: url("/img/backgrounds/index_bg.png");
-  background-size: cover;
+.navbar {
+  width: 5rem;
   height: 100vh;
-  background-repeat: no-repeat;
-  background-position: center center;
+  position: fixed;
+  background-color: var(--secondary-color);
+  transition: width 200ms ease;
 }
 
-.login-container {
-  background: url("/img/backgrounds/login_bg.png");
-  background-size: cover;
-  height: 100vh;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-.network-container {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-}
-
-.toolbar {
-  height: 100vh;
-  width: clamp(250px, 15vw + 50px, 25vw);
-  background-color: var(--s-colour);
-  position: relative;
-}
-
-.toolbar--import h2 {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-colour);
-  font-size: var(--md-font-size);
-}
-
-.toolbar--import button {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 15px 40px;
-  font-size: var(--bs-font-size);
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  color: var(--p-colour);
-  border: none;
-  background-color: var(--a-colour);
-  border-radius: 15px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.toolbar--import button:hover {
-  background-color: var(--p-colour);
-  color: var(--text-colour);
-}
-
-.toolbar--analytics h2 {
-  text-align: center;
-  margin-top: 40px;
-  padding: 20px;
-  color: var(--text-colour);
-  font-size: var(--md-font-size);
-}
-
-.toolbar--analytics img {
-  width: 80%;
-  height: auto;
-}
-
-.toolbar--drag {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
-  color: var(--a-colour);
-  background-color: var(--s-colour);
-  padding: 5px 10px;
-  border-radius: 25px;
-  font-size: var(--md-font-size);
-  font-weight: bold;
-  border: 2px solid var(--a-colour);
-  transition: background-color 0.3s;
-}
-
-.toolbar--drag:hover {
-  background-color: var(--p-colour);
-  cursor: w-resize;
-}
-
-.network {
-  background-color: var(--p-colour);
-  height: 100vh;
-  width: auto;
-}
-
-/* .analytics {
-  background-color: var(--a-colour);
-  height: auto;
-}
-
-.analytics--title,
-.analytics--info {
-  text-align: left;
-  padding: 10px 20px;
-  color: var(--p-colour);
-  font-size: var(--md-font-size);
-}
-
-.analytics--info {
-  font-size: var(--bs-font-size);
-} */
-
-.network-container,
-.grid--item {
-  text-align: center;
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  height: 100%;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+.nav-item:last-child {
+  margin-top: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: var(--transition-speed);
+}
+
+.nav-link:hover {
+  opacity: 1;
+  background: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.link-text {
+  display: none;
+  margin-left: 1rem;
+}
+
+.nav-link i {
+  min-width: 2rem;
+  margin: 0 1.5rem;
+  text-align: center;
+}
+
+.navbar:hover {
+  width: 16rem;
+}
+
+.navbar:hover .link-text {
+  display: block;
+}
+
+.logo {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: var(--text-color);
+  background: var(--secondary-color);
+  font-size: 1.5rem;
+  letter-spacing: 0.3ch;
+  width: 100%;
+}
+
+.logo i {
+  transform: rotate(0deg);
+  transition: transform var(--transition-speed);
+}
+
+.navbar:hover .logo i {
+  transform: rotate(-360deg);
 }
 
 .node {
-  /* fill: rgb(18, 225, 185); */
-  fill: transparent;
+  fill: var(--accent-color);
   stroke: white;
   stroke-width: 2px;
   cursor: pointer;
 }
+
 .link {
   stroke: white;
   stroke-opacity: 0.8;
   stroke-width: 3;
 }
 
-.index-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.network-container {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
 }
 
-.index-container button {
-  color: var(--a-colour);
-  margin-top: 20px;
-  background: transparent;
-  padding: 15px 40px;
-  font-size: var(--bs-font-size);
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  border: 1px solid var(--a-colour);
-  transition: background-color 0.3s, color 0.3s;
-  margin: 0px 40px;
+#networkSVG {
+  min-width: 500px;
+}
+
+.bolt {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: palegoldenrod;
+  color: palegoldenrod;
+}
+
+.glow {
+  position: absolute;
+  box-shadow: 0px 0px 3rem red;
+  color: transparent;
+  background-color: transparent;
+  width: 25px;
+  height: 25px;
 }
