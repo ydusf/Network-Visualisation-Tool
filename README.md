@@ -1,7 +1,5 @@
 # Network Graph Visualisation and Inspection Tool
 
-![Project Logo/Icon]
-
 ## Description
 
 Information represented in a graph/network-based form can be defined as a set of nodes with edges between them. This project aims to provide a lightweight, web-based graph/network visualisation and inspection tool. It allows analysts to visualize and understand networks, undertake basic network graph analytics, compare multiple graphs/networks, and highlight structural similarities or differences.
