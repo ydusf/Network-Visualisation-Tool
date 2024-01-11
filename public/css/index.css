@@ -1,0 +1,110 @@
+@import "globals.css";
+
+* {
+  color: rgb(212, 212, 212);
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  background-image: url("/img/backgrounds/index_page.png");
+  background-size: cover;
+}
+
+/* REGISTER BOX STYLING */
+.button-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+a {
+  padding: 10px;
+  text-decoration: none;
+  transition: var(--transition-speed);
+  display: inline-block;
+  line-height: 30px;
+}
+
+a:hover {
+  font-size: 20px;
+}
+
+/* SOLAR ORBIT DESIGN */
+.solar-container {
+  position: relative;
+}
+
+.world-img,
+.blackhold-img {
+  position: absolute;
+  background-size: cover;
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.world-img {
+  height: 15vh;
+  top: 40%;
+  animation: orbit 10s linear infinite;
+  transform-origin: 265% 50%;
+}
+
+.blackhole-img {
+  height: 80vh;
+}
+
+/* OTHER STYLING */
+footer {
+  display: none;
+}
+
+/* RESPONSIVENESS DESIGN */
+@media screen and (max-height: 600px) {
+  a {
+    line-height: 20px;
+    font-size: var(font-size);
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+}
+
+@media screen and (max-height: 530px) {
+  a {
+    line-height: 10px;
+    font-size: 12px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-height: 400px) {
+  a {
+    line-height: 6px;
+    font-size: 8px;
+  }
+
+  h1 {
+    font-size: 12px;
+  }
+}

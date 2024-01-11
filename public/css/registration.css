@@ -1,0 +1,72 @@
+@import "globals.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--primary-color);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.register-box {
+  background-color: var(--primary-color);
+  text-align: center;
+}
+
+h3 {
+  color: var(--text-color);
+  font-size: var(--lg-font-size);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--text-color);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
+.register-btn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.register-btn:hover {
+  background-color: darken(var(--accent-color), 10%);
+}
+
+.swirl-img {
+  height: 80vh;
+  float: right;
+}
+
+@media screen and (max-width: 800px) {
+  .swirl-img {
+    display: none;
+  }
+
+  .register-box {
+    width: 40vw;
+  }
+}
+
+footer {
+  display: none;
+}

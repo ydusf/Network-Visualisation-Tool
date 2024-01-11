@@ -1,3 +1,7 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/nav.css" />
+</head>
+
 <nav class="navbar">
   <ul class="navbar-nav">
     <li class="logo">
@@ -7,10 +11,15 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="#" class="nav-link">
-        <i class="fa-solid fa-file-import"></i>
-        <span class="link-text">Import</span>
-      </a>
+      <form method="POST" action="/upload" enctype="multipart/form-data">
+        <a href="#" class="nav-link">
+          <i class="fa-solid fa-cloud"></i>
+          <span class="link-text">
+            <input type="file" name="file" accept=".csv, .json" multiple />
+            <input type="submit" value="Import Network" />
+          </span>
+        </a>
+      </form>
     </li>
     <li class="nav-item">
       <a href="#" class="nav-link">

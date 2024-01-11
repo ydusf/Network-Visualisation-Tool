@@ -1,0 +1,20 @@
+@import "globals.css";
+
+body {
+  color: black;
+  background-color: var(--primary-color);
+  margin: 0;
+  padding: 0;
+}
+
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--accent-color);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+}

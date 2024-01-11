@@ -1,0 +1,24 @@
+@import "globals.css";
+
+.node {
+  fill: var(--accent-color);
+  stroke: white;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.link {
+  stroke: white;
+  stroke-opacity: 0.8;
+  stroke-width: 3;
+}
+
+.network-container {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
+
+#networkSVG {
+  min-width: 500px;
+}

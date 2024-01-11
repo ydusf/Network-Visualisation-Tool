@@ -3,15 +3,18 @@ export function dragstart(e, d, simulation) {
   d.fx = d.x;
   d.fy = d.y;
 }
+
 export function dragged(e, d) {
   d.fx = e.x;
   d.fy = e.y;
 }
+
 export function dragend(e, d, simulation) {
   if (!e.active) simulation.alphaTarget(0);
   d.fx = null;
   d.fy = null;
 }
+
 export function createLinksAndNodes(svg, graph, subset) {
   const link = svg
     .append("g")
@@ -30,9 +33,10 @@ export function createLinksAndNodes(svg, graph, subset) {
     .append("circle")
     .attr("class", "node")
     .attr("r", 6)
-    .style("fill", (d) => (subset.includes(d.name) ? "red" : null));
+    .style("fill", (d) => (subset.includes(d.id) ? "red" : null));
   return { link: link, node: node };
 }
+
 export function ticked(link, node) {
   link
     .attr("x1", (d) => d.source.x)

@@ -1,0 +1,83 @@
+@import "globals.css";
+
+.navbar {
+  width: 5rem;
+  height: 100vh;
+  position: fixed;
+  background-color: var(--secondary-color);
+  transition: width 200ms ease;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+.nav-item:last-child {
+  margin-top: auto;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: var(--text-color);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: var(--transition-speed);
+}
+
+.nav-link:hover {
+  opacity: 1;
+  background: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.nav-link i {
+  min-width: 2rem;
+  margin: 0 1.5rem;
+  text-align: center;
+}
+
+.link-text {
+  display: none;
+  margin-left: 1rem;
+}
+
+.navbar:hover {
+  width: 16rem;
+}
+
+.navbar:hover .link-text {
+  display: block;
+}
+
+.logo {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: var(--text-color);
+  background: var(--secondary-color);
+  font-size: 1.5rem;
+  letter-spacing: 0.3ch;
+  width: 100%;
+}
+
+.logo i {
+  transform: rotate(0deg);
+  transition: transform var(--transition-speed);
+}
+
+.navbar:hover .logo i {
+  transform: rotate(-360deg);
+}

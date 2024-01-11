@@ -15,6 +15,9 @@ const expressLayout = require("express-ejs-layouts"); // Layouts for EJS templat
 const methodOverride = require("method-override"); // HTTP method override
 const cookieParser = require("cookie-parser"); // Parse cookies from requests
 const session = require("express-session"); // Manage user sessions
+const csvtojson = require("csvtojson");
+const fileUpload = require("express-fileupload");
+const flash = require("connect-flash");
 
 // Create an Express.js application
 const app = express();
@@ -30,6 +33,8 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bo
 app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser()); // Parse cookies
 app.use(methodOverride("_method")); // Enable HTTP method override
+app.use(fileUpload());
+app.use(flash());
 
 // Session configuration
 app.use(
