@@ -31,7 +31,7 @@ Information represented in a graph/network-based form can be defined as a set of
 
 ## Configuration
 
-- The tool uses environment variables for configuration. Create a `.env` file and refer to `.env.example` for required variables.
+- The tool uses environment variables for configuration. Create a `.env` file and message Sebastian Latham using email below for the environment variables.
 
 ## Dependencies
 
