@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const jwtSecret = process.env.JWT_SECRET_KEY;
+
 const authValidator = (req, res, next) => {
   const token = req.cookies.token;
 
@@ -12,8 +15,6 @@ const authValidator = (req, res, next) => {
   } catch (error) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
-  next();
 };
 
 module.exports = authValidator;
