@@ -8,8 +8,13 @@ import {
 } from "./network/utils.js";
 import { handleResize } from "./network/responsive.js";
 
-const dataFilePath = "/data/data.json";
+const networkData = JSON.parse(
+  document.getElementById("network-data").textContent
+);
+
+// const dataFilePath = "/data/data.json";
 function visualiseNetwork(graph, subset) {
+  console.log(graph.nodes);
   const svg = d3.select("svg");
   const { link, node } = createLinksAndNodes(svg, graph, subset);
   const simulation = d3
@@ -31,11 +36,16 @@ function visualiseNetwork(graph, subset) {
   );
   window.addEventListener("resize", () => handleResize(simulation, svg));
 }
-loadData(dataFilePath)
-  .then(function (data) {
-    const popular = ["ANAKIN"];
-    visualiseNetwork(data, popular);
-  })
-  .catch((error) => {
-    console.error("Error fetching or converting the file:", error);
-  });
+
+// loadData(dataFilePath)
+//   .then(function (data) {
+//     const popular = ["ANAKIN"];
+//     visualiseNetwork(data, popular);
+//   })
+//   .catch((error) => {
+//     console.error("Error fetching or converting the file:", error);
+//   });
+
+const popular = ["ANAKIN"];
+
+visualiseNetwork(networkData, popular);

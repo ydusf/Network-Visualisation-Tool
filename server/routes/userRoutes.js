@@ -50,7 +50,7 @@ router.post("/login", async (req, res) => {
       expiresIn: "1d",
     });
     res.cookie("token", token, { httpOnly: true });
-    res.redirect("/register");
+    res.redirect("/network");
   } catch (err) {
     console.error(err);
   }

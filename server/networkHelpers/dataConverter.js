@@ -1,4 +1,4 @@
-export function convertData(data, dataType) {
+function convertData(data, dataType) {
   switch (dataType) {
     case "json":
       try {
@@ -27,3 +27,5 @@ export function convertData(data, dataType) {
       throw error;
   }
 }
+
+module.exports = convertData;
