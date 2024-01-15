@@ -8,4 +8,8 @@
   <svg id="networkSVG"></svg>
 </div>
 
-<script type="module" defer src="/js/main.min.js"></script>
+<div id="network-data" style="display: none">
+  <%= JSON.stringify({ nodes: nodes, links: links }) %>
+</div>
+
+<script type="module" defer src="/js/main.js"></script>

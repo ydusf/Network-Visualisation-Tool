@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const LinkSchema = new Schema(
   {
     network_id: { type: Schema.Types.ObjectId, ref: "Network" },
-    source: { type: Schema.Types.ObjectId, ref: "Node" },
-    target: { type: Schema.Types.ObjectId, ref: "Node" },
+    source: Object,
+    target: Object,
     data: Object,
   },
   { timestamps: true }
