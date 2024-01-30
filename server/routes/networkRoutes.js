@@ -1,29 +1,19 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const authValidator = require("../middleware/authValidator");
-const convertData = require("../networkHelpers/dataConverter");
-const multer = require("multer");
-const User = require("../models/UserModel");
-const Network = require("../models/NetworkModel");
-const Node = require("../models/NodeModel");
-const Link = require("../models/LinkModel");
-const mongoose = require("mongoose");
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, path.join("network_files"));
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   },
-// });
+const authValidator = require('../middleware/authValidator');
+const convertData = require('../networkHelpers/dataConverter');
+const multer = require('multer');
+const User = require('../models/UserModel');
+const Network = require('../models/NetworkModel');
+const Node = require('../models/NodeModel');
+const Link = require('../models/LinkModel');
 
 const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
 // GET - NETWORK VISUALISATION
-router.get("/network", authValidator, async (req, res) => {
+router.get('/network', authValidator, async (req, res) => {
   try {
     const user = req.user;
 
@@ -32,34 +22,33 @@ router.get("/network", authValidator, async (req, res) => {
     const nodes = (await Node.find({ _id: { $in: userNetwork.nodes } })) || [];
     const links = (await Link.find({ _id: { $in: userNetwork.links } })) || [];
 
-    res.render("network", { nodes, links });
+    res.render('network', { nodes, links });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send('Internal Server Error');
     return;
   }
 });
 
 router.post(
-  "/upload",
-  upload.single("file"),
+  '/upload',
+  upload.single('file'),
   authValidator,
   async (req, res) => {
     try {
       // Validate file upload
       if (!req.file) {
-        return res.status(400).json({ error: "No file uploaded." });
+        return res.status(400).json({ error: 'No file uploaded.' });
       }
 
       // Convert file data to JSON
       const file = req.file;
-      const fileExt = file.originalname.split(".").pop().toLowerCase();
-
+      const fileExt = file.originalname.split('.').pop().toLowerCase();
       const fileContent = convertData(file.buffer.toString(), fileExt);
 
       // Validate file content
       if (!fileContent.nodes || !fileContent.links) {
-        return res.status(400).json({ error: "Invalid file content." });
+        return res.status(400).json({ error: 'Invalid file content.' });
       }
 
       // Convert JSON to nodes & links
@@ -67,15 +56,15 @@ router.post(
       const links = fileContent.links;
 
       const network = new Network({
-        title: "Test Network",
-        description: "Testing",
+        title: 'Test Network',
+        description: 'Testing',
         user_id: req.user._id,
         nodes: [],
         links: [],
       });
 
       const nodeObjects = await Promise.all(
-        nodes.map(async (nodeData) => {
+        nodes.map(async nodeData => {
           const newNode = new Node({
             network_id: network._id,
             label: nodeData.name,
@@ -90,7 +79,7 @@ router.post(
       );
 
       const linkObjects = await Promise.all(
-        links.map(async (linkData) => {
+        links.map(async linkData => {
           const newLink = new Link({
             network_id: network._id,
             source: linkData.source,
@@ -106,16 +95,14 @@ router.post(
       );
 
       // INSERT NODES AND LINKS INTO NEWLY CREATED NETWORK
-      network.nodes = nodeObjects.map((node) => node._id);
-      network.links = linkObjects.map((link) => link._id);
+      network.nodes = nodeObjects.map(node => node._id);
+      network.links = linkObjects.map(link => link._id);
       await network.save();
 
-      console.log(network);
-
-      res.redirect("/network");
+      res.redirect('/network');
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error." });
+      res.status(500).json({ error: 'Internal Server Error.' });
     }
   }
 );
