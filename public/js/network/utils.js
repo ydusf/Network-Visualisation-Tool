@@ -15,33 +15,32 @@ export function dragend(e, d, simulation) {
   d.fy = null;
 }
 
-export function createLinksAndNodes(svg, graph, subset) {
+export function createLinksAndNodes(svg, graph) {
   const link = svg
-    .append("g")
-    .attr("class", "link")
-    .selectAll("line")
+    .append('g')
+    .attr('class', 'link')
+    .selectAll('line')
     .data(graph.links)
     .enter()
-    .append("line")
-    .attr("class", "link")
-    .attr("marker-end", "url(#arrowhead)");
+    .append('line')
+    .attr('class', 'link')
+    .attr('marker-end', 'url(#arrowhead)');
   const node = svg
-    .append("g")
-    .selectAll("circle")
+    .append('g')
+    .selectAll('circle')
     .data(graph.nodes)
     .enter()
-    .append("circle")
-    .attr("class", "node")
-    .attr("r", 6)
-    .style("fill", (d) => (subset.includes(d.id) ? "red" : null));
+    .append('circle')
+    .attr('class', 'node')
+    .attr('r', 6);
   return { link: link, node: node };
 }
 
 export function ticked(link, node) {
   link
-    .attr("x1", (d) => d.source.x)
-    .attr("y1", (d) => d.source.y)
-    .attr("x2", (d) => d.target.x)
-    .attr("y2", (d) => d.target.y);
-  node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+    .attr('x1', d => d.source.x)
+    .attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x)
+    .attr('y2', d => d.target.y);
+  node.attr('cx', d => d.x).attr('cy', d => d.y);
 }

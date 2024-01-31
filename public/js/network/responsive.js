@@ -1,11 +1,11 @@
 export function handleResize(simulation, svg) {
   simulation
-    .force("charge", d3.forceManyBody().strength(-(window.innerWidth * 0.25)))
+    .force('charge', d3.forceManyBody().strength(-(window.innerWidth * 0.25)))
     .force(
-      "center",
+      'center',
       d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2)
     );
   simulation.restart();
 
-  svg.attr("width", window.innerWidth).attr("height", window.innerHeight);
+  svg.attr('width', window.innerWidth).attr('height', window.innerHeight);
 }
