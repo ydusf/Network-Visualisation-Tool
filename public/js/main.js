@@ -12,10 +12,10 @@ const networkData = JSON.parse(
   document.getElementById('network-data').textContent
 );
 
-function visualiseNetwork(graph, subset) {
+function visualiseNetwork(graph) {
   console.log(graph.nodes);
   const svg = d3.select('svg');
-  const { link, node } = createLinksAndNodes(svg, graph, subset);
+  const { link, node } = createLinksAndNodes(svg, graph);
   const simulation = d3
     .forceSimulation(graph.nodes)
     .force('link', d3.forceLink().links(graph.links))
@@ -36,6 +36,4 @@ function visualiseNetwork(graph, subset) {
   window.addEventListener('resize', () => handleResize(simulation, svg));
 }
 
-const popular = ['ANAKIN'];
-
-visualiseNetwork(networkData, popular);
+visualiseNetwork(networkData);
