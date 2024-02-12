@@ -78,16 +78,20 @@ router.post(
       });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       const nodeObjects = await Promise.all(
         nodes.map(async nodeData => {
 =======
       // Create and save nodes in parallel
+=======
+>>>>>>> d10987b5a9ba822591aab2b54f59cdf85fc0d5fc
       const nodeObjects = await Promise.all(
         fileContent.nodes.map(async nodeData => {
 >>>>>>> 53ee6e8615671735bfa823593199f4b1d34c325a
           const newNode = new Node({
             network_id: network._id,
             label: nodeData.name,
+            color: nodeData.colour,
             data: nodeData.value,
           });
 <<<<<<< HEAD
@@ -107,7 +111,6 @@ router.post(
         })
       );
 
-      // Create and save links in parallel
       const linkObjects = await Promise.all(
         fileContent.links.map(async linkData => {
 >>>>>>> 53ee6e8615671735bfa823593199f4b1d34c325a

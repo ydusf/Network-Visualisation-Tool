@@ -4,7 +4,7 @@
   "description": "CM2305 Group Project - 19 - Network Visualisation & Graph Inspection Tool",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "app.js",
     "dev": "nodemon app.js"
   },
@@ -34,7 +34,8 @@
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mongoose": "^8.0.4",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "sinon": "^17.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
