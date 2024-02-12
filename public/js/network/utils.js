@@ -18,13 +18,11 @@ export function dragend(e, d, simulation) {
 export function createLinksAndNodes(svg, graph) {
   const link = svg
     .append('g')
-    .attr('class', 'link')
     .selectAll('line')
     .data(graph.links)
     .enter()
     .append('line')
-    .attr('class', 'link')
-    .attr('marker-end', 'url(#arrowhead)');
+    .attr('class', 'link');
   const node = svg
     .append('g')
     .selectAll('circle')
@@ -32,7 +30,8 @@ export function createLinksAndNodes(svg, graph) {
     .enter()
     .append('circle')
     .attr('class', 'node')
-    .attr('r', 6);
+    .attr('r', 6)
+    .attr('fill', d => d.color);
   return { link: link, node: node };
 }
 

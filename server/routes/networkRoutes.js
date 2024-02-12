@@ -65,12 +65,12 @@ router.post(
         links: [],
       });
 
-      // Create and save nodes in parallel
       const nodeObjects = await Promise.all(
         fileContent.nodes.map(async nodeData => {
           const newNode = new Node({
             network_id: network._id,
             label: nodeData.name,
+            color: nodeData.colour,
             data: nodeData.value,
           });
           await newNode.save();
@@ -78,7 +78,6 @@ router.post(
         })
       );
 
-      // Create and save links in parallel
       const linkObjects = await Promise.all(
         fileContent.links.map(async linkData => {
           const newLink = new Link({
