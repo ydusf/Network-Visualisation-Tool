@@ -13,7 +13,10 @@ const networkData = JSON.parse(
 );
 
 function visualiseNetwork(graph) {
+<<<<<<< HEAD
   console.log(graph.nodes);
+=======
+>>>>>>> 53ee6e8615671735bfa823593199f4b1d34c325a
   const svg = d3.select('svg');
   const { link, node } = createLinksAndNodes(svg, graph);
   const simulation = d3

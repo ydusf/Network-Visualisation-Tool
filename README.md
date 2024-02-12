@@ -17,9 +17,13 @@ Information represented in a graph/network-based form can be defined as a set of
 
 2. Install dependencies:
 
+<<<<<<< HEAD
 - Navigate to root directory and run `npm install`
 
 4. Set up environment variables:
+=======
+3. Set up environment variables:
+>>>>>>> 53ee6e8615671735bfa823593199f4b1d34c325a
 
 - Create a `.env` file and add the necessary variables.
 
