@@ -32,6 +32,7 @@ export function createLinksAndNodes(svg, graph) {
     .attr('class', 'node')
     .attr('r', 6)
     .attr('fill', d => d.color);
+
   return { link: link, node: node };
 }
 
