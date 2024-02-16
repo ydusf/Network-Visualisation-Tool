@@ -6,7 +6,6 @@ const NodeSchema = new Schema(
     network_id: { type: Schema.Types.ObjectId, ref: 'Network' },
     label: String,
     data: Object,
-    color: String,
   },
   { timestamps: true }
 );

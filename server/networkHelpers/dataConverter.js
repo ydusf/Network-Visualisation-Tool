@@ -9,7 +9,13 @@ function convertData(data, dataType) {
     case 'csv':
       return parseCSV(data);
     case 'graphml':
-      return parseGraphML(data);
+      return parseGraphML(data)
+        .then(jsonData => {
+          return jsonData;
+        })
+        .catch(error => {
+          console.error('Error parsing GraphML:', error);
+        });
     default:
       console.error('Unsupported data type');
   }

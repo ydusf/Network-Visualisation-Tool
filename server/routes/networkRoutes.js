@@ -49,7 +49,7 @@ router.post(
       // Convert file data to JSON
       const file = req.file;
       const fileExt = file.originalname.split('.').pop().toLowerCase();
-      const fileContent = convertData(file.buffer.toString(), fileExt);
+      const fileContent = await convertData(file.buffer.toString(), fileExt);
 
       // Validate file content
       if (!fileContent.nodes || !fileContent.links) {
@@ -68,14 +68,15 @@ router.post(
       const nodes = fileContent.nodes;
       const links = fileContent.links;
 
+      console.log(nodes);
       // Create and save nodes in parallel
       const nodeObjects = await Promise.all(
         nodes.map(async nodeData => {
+          console.log(nodeData.id);
           const newNode = new Node({
             network_id: network._id,
-            label: nodeData.name,
-            color: nodeData.colour,
-            data: nodeData.value,
+            label: nodeData.id,
+            data: nodeData[1] || null,
           });
           await newNode.save();
           return newNode._id;
@@ -88,7 +89,7 @@ router.post(
             network_id: network._id,
             source: linkData.source,
             target: linkData.target,
-            data: linkData.value,
+            data: linkData.value || null,
           });
           await newLink.save();
           return newLink._id;

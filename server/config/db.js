@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
-// const User = require("../models/UserModel");
-// const Link = require("../models/LinkModel");
-// const Node = require("../models/NodeModel");
-// const Network = require("../models/NetworkModel");
+const mongoose = require('mongoose');
+// const User = require('../models/UserModel');
+// const Link = require('../models/LinkModel');
+// const Node = require('../models/NodeModel');
+// const Network = require('../models/NetworkModel');
 
 const connectDB = async () => {
   try {
-    mongoose.set("strictQuery", false);
+    mongoose.set('strictQuery', false);
     const conn = await mongoose.connect(process.env.MONGODB_URI);
     console.log(`Database Connected: ${conn.connection.host}`);
   } catch (error) {
@@ -16,19 +16,19 @@ const connectDB = async () => {
 
 // async function deleteAllEntries() {
 //   try {
-//     await User.deleteMany({});
-//     console.log("Users deleted successfully.");
+//     // await User.deleteMany({});
+//     // console.log('Users deleted successfully.');
 
 //     await Network.deleteMany({});
-//     console.log("Networks deleted successfully.");
+//     console.log('Networks deleted successfully.');
 
 //     await Node.deleteMany({});
-//     console.log("Nodes deleted successfully.");
+//     console.log('Nodes deleted successfully.');
 
 //     await Link.deleteMany({});
-//     console.log("Links deleted successfully.");
+//     console.log('Links deleted successfully.');
 //   } catch (error) {
-//     console.error("Error deleting entries:", error);
+//     console.error('Error deleting entries:', error);
 //   } finally {
 //     // Close the database connection
 //     mongoose.connection.close();
