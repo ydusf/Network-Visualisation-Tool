@@ -1,30 +1,17 @@
+const parseJSON = require('./parseJSON');
+const parseCSV = require('./parseCSV');
+const parseGraphML = require('./parseGraphML');
+
 function convertData(data, dataType) {
   switch (dataType) {
-    case "json":
-      try {
-        const jsonData = JSON.parse(data);
-        return jsonData;
-      } catch (error) {
-        console.error("Error converting data to JSON");
-        throw error;
-      }
-    case "csv":
-      try {
-        csvtojson()
-          .fromFile("file_upload")
-          .then((jsonObj) => {
-            console.log(jsonObj);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } catch (error) {
-        console.error("Error converting data from CSV to JSON");
-        throw error;
-      }
+    case 'json':
+      return parseJSON(data);
+    case 'csv':
+      return parseCSV(data);
+    case 'graphml':
+      return parseGraphML(data);
     default:
-      console.error("Unsupported data type");
-      throw error;
+      console.error('Unsupported data type');
   }
 }
 
