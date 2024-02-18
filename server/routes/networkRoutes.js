@@ -68,15 +68,13 @@ router.post(
       const nodes = fileContent.nodes;
       const links = fileContent.links;
 
-      console.log(nodes);
       // Create and save nodes in parallel
       const nodeObjects = await Promise.all(
         nodes.map(async nodeData => {
-          console.log(nodeData.id);
           const newNode = new Node({
             network_id: network._id,
-            label: nodeData.id,
-            data: nodeData[1] || null,
+            label: nodeData.name,
+            data: nodeData.value,
           });
           await newNode.save();
           return newNode._id;
@@ -89,7 +87,7 @@ router.post(
             network_id: network._id,
             source: linkData.source,
             target: linkData.target,
-            data: linkData.value || null,
+            data: linkData.value,
           });
           await newLink.save();
           return newLink._id;
@@ -100,6 +98,8 @@ router.post(
       network.nodes = nodeObjects;
       network.links = linkObjects;
       await network.save();
+
+      console.log(network);
 
       res.redirect('/network');
     } catch (error) {
