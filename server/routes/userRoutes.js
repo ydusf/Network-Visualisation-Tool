@@ -64,7 +64,9 @@ router.get("/login", async (req, res) => {
 // GET - USER LOGOUT
 router.get("/logout", async (req, res) => {
   res.clearCookie("token");
-  res.redirect("/");
+  res.render("logoutPage");
 });
+
+module.exports = router;
 
 module.exports = router;
