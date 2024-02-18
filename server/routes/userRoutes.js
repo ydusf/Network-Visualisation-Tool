@@ -13,7 +13,7 @@ router.post("/register", async (req, res) => {
 
     try {
       await User.create({ username, password: hashPass });
-      res.redirect("/network");
+      res.redirect("/login");
     } catch (error) {
       if (error.code === 11000) {
         res.redirect("/register");
@@ -37,13 +37,13 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      res.redirect("/register");
+      res.redirect("/login");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      res.redirect("/register");
+      res.redirect("/login");
     }
 
     const token = jwt.sign({ userId: user._id }, jwtSecret, {
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
 
 // GET - USER LOGIN
 router.get("/login", async (req, res) => {
-  res.render("register");
+  res.render("login");
 });
 
 // GET - USER LOGOUT
