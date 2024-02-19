@@ -23,29 +23,37 @@ function visualiseNetwork(graph) {
     .force('center', d3.forceCenter(width / 2, height / 2))
     .on('tick', () => ticked(link, node));
 
-  svg
-    .attr('width', width)
-    .attr('height', height)
-    .call(zoom)
-    .on('click', function (event) {
-      const [zoomX, zoomY] = d3
-        .zoomTransform(svg.node())
-        .invert([event.offsetX, event.offsetY]);
-      graph.nodes.push({ x: zoomX, y: zoomY });
-      const newNode = svg
-        .select('g')
-        .selectAll('.node')
-        .data(graph.nodes)
-        .enter()
-        .append('circle')
-        .attr('class', 'node')
-        .attr('r', 6)
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y);
-      node.merge(newNode);
-      simulation.nodes(graph.nodes);
-      simulation.alpha(1).restart();
-    });
+  // Assigns parent, children, height, depth, etc..
+  const root = d3.hierarchy(graph);
+  const nodesCHECK = root.descendants();
+
+  console.log(root);
+  console.log(nodesCHECK);
+
+  // console.log(nodesCHECK);
+  // console.log(root);
+  // console.log(linksCHECK);
+
+  svg.attr('width', width).attr('height', height).call(zoom);
+  // .on('click', function (event) {
+  //   const [zoomX, zoomY] = d3
+  //     .zoomTransform(svg.node())
+  //     .invert([event.offsetX, event.offsetY]);
+  //   graph.nodes.push({ x: zoomX, y: zoomY });
+  //   const newNode = svg
+  //     .select('g')
+  //     .selectAll('.node')
+  //     .data(graph.nodes)
+  //     .enter()
+  //     .append('circle')
+  //     .attr('class', 'node')
+  //     .attr('r', 6)
+  //     .attr('cx', d => d.x)
+  //     .attr('cy', d => d.y);
+  //   node.merge(newNode);
+  //   simulation.nodes(graph.nodes);
+  //   simulation.alpha(1).restart();
+  // });
 
   node.call(drag(simulation));
   // handleResize(simulation, svg);
