@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const authValidator = require('../middleware/authValidator');
-const convertData = require('../networkHelpers/dataConverter');
 const multer = require('multer');
-const User = require('../models/UserModel');
+
 const Network = require('../models/NetworkModel');
 const Node = require('../models/NodeModel');
 const Link = require('../models/LinkModel');
+
+const authValidator = require('../middleware/authValidator');
+const convertData = require('../networkHelpers/dataConverter');
+const createNetwork = require('../networkHelpers/processFiles');
 
 const storage = multer.memoryStorage();
 
@@ -17,19 +19,20 @@ router.get('/network', authValidator, async (req, res) => {
   try {
     const user = req.user;
 
-    const userNetwork = await Network.findOne({ user_id: user._id });
+    const userNetworks = await Network.find({ user_id: user._id });
 
-    let nodes = [];
-    let links = [];
+    let networksData = [];
 
-    if (userNetwork) {
-      nodes = await Node.find({ _id: { $in: userNetwork.nodes } });
-      links = await Link.find({ _id: { $in: userNetwork.links } });
+    if (userNetworks.length > 0) {
+      for (const network of userNetworks) {
+        const nodes = await Node.find({ _id: { $in: network.nodes } });
+        const links = await Link.find({ _id: { $in: network.links } });
+
+        networksData.push({ nodes, links });
+      }
     }
 
-    console.log(nodes);
-
-    res.render('network', { nodes, links });
+    res.render('network', { networksData: networksData });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -39,69 +42,34 @@ router.get('/network', authValidator, async (req, res) => {
 
 router.post(
   '/upload',
-  upload.single('file'),
+  upload.array('files', 2),
   authValidator,
   async (req, res) => {
     try {
       // Validate file upload
-      if (!req.file) {
+      const files = req.files;
+
+      if (!files) {
         return res.status(400).json({ error: 'No file uploaded.' });
       }
 
-      // Convert file data to JSON
-      const file = req.file;
-      const fileExt = file.originalname.split('.').pop().toLowerCase();
-      const fileContent = await convertData(file.buffer.toString(), fileExt);
+      files.forEach(async file => {
+        // Convert file data to JSON
+        console.log(file.originalname);
+        const fileExt = file.originalname.split('.').pop().toLowerCase();
+        const fileContent = await convertData(file.buffer.toString(), fileExt);
 
-      // Validate file content
-      if (!fileContent.nodes || !fileContent.links) {
-        return res.status(400).json({ error: 'Invalid file content.' });
-      }
+        // Validate file content
+        if (!fileContent.nodes || !fileContent.links) {
+          return res.status(400).json({ error: 'Invalid file content.' });
+        }
 
-      const network = new Network({
-        title: 'Test Network',
-        description: 'Testing',
-        user_id: req.user._id,
-        nodes: [],
-        links: [],
+        // Convert JSON to nodes & links
+        const nodes = fileContent.nodes;
+        const links = fileContent.links;
+
+        await createNetwork(nodes, links, req.user._id);
       });
-
-      // Convert JSON to nodes & links
-      const nodes = fileContent.nodes;
-      const links = fileContent.links;
-
-      // Create and save nodes in parallel
-      const nodeObjects = await Promise.all(
-        nodes.map(async nodeData => {
-          const newNode = new Node({
-            network_id: network._id,
-            label: nodeData.name,
-            data: nodeData.value,
-          });
-          await newNode.save();
-          return newNode._id;
-        })
-      );
-
-      const linkObjects = await Promise.all(
-        links.map(async linkData => {
-          const newLink = new Link({
-            network_id: network._id,
-            source: linkData.source,
-            target: linkData.target,
-            data: linkData.value,
-          });
-          await newLink.save();
-          return newLink._id;
-        })
-      );
-
-      // Assign node and link IDs to network and save network
-      network.nodes = nodeObjects;
-      network.links = linkObjects;
-      await network.save();
-
-      console.log(network);
 
       res.redirect('/network');
     } catch (error) {

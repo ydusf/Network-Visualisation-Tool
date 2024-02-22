@@ -1,14 +1,14 @@
 @import 'globals.css';
 
 .node {
-  fill: var(--accent-color);
+  /* fill: var(--accent-color); */
   stroke: var(--secondary-color);
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .link {
-  stroke: white;
+  /* stroke: white; */
   stroke-opacity: 0.6;
   stroke-width: 3;
 }
