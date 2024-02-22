@@ -1,10 +1,10 @@
-@import "globals.css";
+@import 'globals.css';
 
 body {
   margin: 0;
   padding: 0;
   font-family: var(--font-family);
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
 }
 
 .container {
@@ -17,6 +17,8 @@ body {
 .register-box {
   background-color: var(--primary-color);
   text-align: center;
+  border: solid var(--secondary-color) 2px;
+  padding: 40px;
 }
 
 h3 {

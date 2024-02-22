@@ -27,6 +27,8 @@ router.get('/network', authValidator, async (req, res) => {
       links = await Link.find({ _id: { $in: userNetwork.links } });
     }
 
+    console.log(nodes);
+
     res.render('network', { nodes, links });
   } catch (error) {
     console.error(error);
