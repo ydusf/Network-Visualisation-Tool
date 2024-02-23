@@ -17,8 +17,11 @@
   padding: 0;
   margin: 0;
   height: 100vh;
+  display: flex;
 }
 
-#networkSVG {
+svg {
   min-width: 500px;
+  border: 1px solid var(--accent-color);
+  margin-left: 80px;
 }

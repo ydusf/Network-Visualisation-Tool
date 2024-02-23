@@ -1,4 +1,4 @@
-@import "globals.css";
+@import 'globals.css';
 
 body {
   color: black;
@@ -38,7 +38,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .loader::after {
-  content: "";
+  content: '';
   width: 75px;
   height: 75px;
   border: 15px solid #b89393;
@@ -54,4 +54,8 @@ body::-webkit-scrollbar-thumb {
   to {
     transform: rotate(1turn);
   }
+}
+
+footer {
+  display: none;
 }

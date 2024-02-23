@@ -1,5 +1,65 @@
-import { createLinksAndNodes, ticked, drag } from './network/utils.min.js';
-import { handleResize } from './network/responsive.min.js';
+function handleResize(simulation, svg, width, height) {
+  simulation
+    .force('charge', d3.forceManyBody().strength(-(width * 0.25)))
+    .force('center', d3.forceCenter(width / 2, height / 2));
+  simulation.restart();
+
+  svg.attr('width', width).attr('height', height);
+}
+
+function drag(simulation) {
+  function dragstart(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragend(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+
+  return d3
+    .drag()
+    .on('start', dragstart)
+    .on('drag', dragged)
+    .on('end', dragend);
+}
+
+function createLinksAndNodes(svg, graph) {
+  const link = svg
+    .append('g')
+    .selectAll('line')
+    .data(graph.links)
+    .join('line')
+    .attr('class', 'link');
+
+  const node = svg
+    .append('g')
+    .selectAll('circle')
+    .data(graph.nodes)
+    .join('circle')
+    .attr('class', 'node')
+    .attr('r', 6);
+
+  return { link, node };
+}
+
+function ticked(link, node) {
+  link
+    .attr('x1', d => d.source.x)
+    .attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x)
+    .attr('y2', d => d.target.y);
+
+  node.attr('cx', d => d.x).attr('cy', d => d.y);
+}
 
 const networkData = JSON.parse(
   document.getElementById('network-data').textContent
@@ -15,16 +75,24 @@ const networkLinkColours = {
 function visualiseNetwork(networkData) {
   networkData.forEach((graph, idx) => {
     const height = window.innerHeight;
-    const width = window.innerWidth;
-    const svg = d3.selectAll('svg');
+    const width = window.innerWidth / networkData.length;
+    const svg = d3
+      .select(`#svg-${idx}`)
+      .attr('width', width)
+      .attr('height', height);
 
+    const container = svg.append('g');
+
+    function zoomed(event) {
+      container.attr('transform', event.transform);
+      ticked(link, node);
+    }
     const zoom = d3
       .zoom()
       .scaleExtent([0.1, 5])
       .duration(100)
       .on('zoom', zoomed);
-
-    const container = svg.append('g');
+    svg.call(zoom);
 
     const { link, node } = createLinksAndNodes(container, graph);
 
@@ -38,46 +106,10 @@ function visualiseNetwork(networkData) {
       .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', () => ticked(link, node));
 
-    // Assigns parent, children, height, depth, etc..
-    const root = d3.hierarchy(graph);
-    const nodesCHECK = root.descendants();
-
-    console.log(root);
-    console.log(nodesCHECK);
-
-    // console.log(nodesCHECK);
-    // console.log(root);
-    // console.log(linksCHECK);
-
-    svg.attr('width', width).attr('height', height).call(zoom);
-    // .on('click', function (event) {
-    //   const [zoomX, zoomY] = d3
-    //     .zoomTransform(svg.node())
-    //     .invert([event.offsetX, event.offsetY]);
-    //   graph.nodes.push({ x: zoomX, y: zoomY });
-    //   const newNode = svg
-    //     .select('g')
-    //     .selectAll('.node')
-    //     .data(graph.nodes)
-    //     .enter()
-    //     .append('circle')
-    //     .attr('class', 'node')
-    //     .attr('r', 6)
-    //     .attr('cx', d => d.x)
-    //     .attr('cy', d => d.y);
-    //   node.merge(newNode);
-    //   simulation.nodes(graph.nodes);
-    //   simulation.alpha(1).restart();
-    // });
-
     node.call(drag(simulation));
-    // handleResize(simulation, svg);
-    window.addEventListener('resize', () => handleResize(simulation, svg));
-
-    function zoomed(event) {
-      container.attr('transform', event.transform);
-      ticked(link, node);
-    }
+    window.addEventListener('resize', () =>
+      handleResize(simulation, svg, width, height)
+    );
   });
 }
 
