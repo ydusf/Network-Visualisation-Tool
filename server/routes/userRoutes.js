@@ -68,24 +68,4 @@ router.get('/logout', authValidator, async (req, res) => {
   res.render('logoutPage');
 });
 
-// function isAuthenticated(req, res, next) {
-//   // Check for authentication credentials, such as tokens or session data
-//   const token = req.cookies.token; // Assuming you're using cookies for token-based authentication
-
-//   if (token) {
-//     try {
-//       // Verify the token
-//       const decoded = jwt.verify(token, jwtSecret);
-//       req.user = decoded; // Attach the decoded user information to the request object
-//       next(); // Proceed to the next middleware or route handler
-//     } catch (error) {
-//       // If token verification fails, redirect the user to the login page or handle the error accordingly
-//       res.redirect('/');
-//     }
-//   } else {
-//     // If no token is present, redirect the user to the login page
-//     res.redirect('/');
-//   }
-// }
-
 module.exports = router;
