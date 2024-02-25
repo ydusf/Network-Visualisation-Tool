@@ -113,4 +113,31 @@ function visualiseNetwork(networkData) {
   });
 }
 
+// function filterNodesByOrder(nodes) {
+//   console.log("filterNodesByOrder function called."); // Add this line
+//   nodes.forEach(node => {
+//     if (node.order > 3) {
+//       node.color = 'red'; // Example color
+//     }
+//   });
+// }
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   const filterButton = document.getElementById('filter-button');
+
+//   if (filterButton) {
+//     filterButton.addEventListener('click', function(event) {
+//       event.preventDefault();
+
+//       networkData.forEach(graph => {
+//         filterNodesByOrder(graph.nodes);
+//       });
+      
+//       visualiseNetwork(networkData);
+//     });
+//   } else {
+//     console.error("Filter button not found!");
+//   }
+// });
+
 visualiseNetwork(networkData);
