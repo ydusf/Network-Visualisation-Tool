@@ -11,6 +11,12 @@
     <div class="register-box">
       <h3>Login</h3>
       <br />
+      <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+        <div style="color: red;">
+          <%= errorMessage %>
+        </div>
+      <% } %>
+      <br />
       <form action="/login" method="POST">
         <input type="text" placeholder="Enter username" name="username" />
         <input type="password" placeholder="Enter password" name="password" />
