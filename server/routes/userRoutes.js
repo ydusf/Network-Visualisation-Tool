@@ -38,13 +38,13 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      res.redirect('/login');
+      res.redirect('/login?error=True');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      res.redirect('/login');
+      res.redirect('/login?error=True');
     }
 
     const token = jwt.sign({ userId: user._id }, jwtSecret, {
@@ -59,7 +59,13 @@ router.post('/login', async (req, res) => {
 
 // GET - USER LOGIN
 router.get('/login', async (req, res) => {
-  res.render('login');
+  const errorMessage = req.query.error;
+  let message = "";
+  if(errorMessage === 'True') {
+    message = "Incorrect Username or Password";
+  }
+  // Pass the message to the template
+  res.render('login', { errorMessage: message });
 });
 
 // GET - USER LOGOUT
