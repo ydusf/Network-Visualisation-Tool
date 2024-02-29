@@ -22,6 +22,5 @@
 
 svg {
   min-width: 500px;
-  border: 1px solid var(--accent-color);
-  margin-left: 80px;
+  /* border: 1px solid var(--accent-color); */
 }

@@ -75,11 +75,12 @@ const networkLinkColours = {
 function visualiseNetwork(networkData) {
   networkData.forEach((graph, idx) => {
     const height = window.innerHeight;
-    const width = window.innerWidth / networkData.length;
+    const width = window.innerWidth;
     const svg = d3
       .select(`#svg-${idx}`)
       .attr('width', width)
       .attr('height', height);
+    // .style('border', '1px solid green');
 
     const container = svg.append('g');
 
@@ -132,7 +133,7 @@ function visualiseNetwork(networkData) {
 //       networkData.forEach(graph => {
 //         filterNodesByOrder(graph.nodes);
 //       });
-      
+
 //       visualiseNetwork(networkData);
 //     });
 //   } else {

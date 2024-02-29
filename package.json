@@ -4,7 +4,8 @@
   "description": "CM2305 Group Project - 19 - Network Visualisation & Graph Inspection Tool",
   "main": "app.js",
   "scripts": {
-    "test": "mocha",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "start": "app.js",
     "dev": "nodemon app.js"
   },
@@ -34,10 +35,11 @@
     "method-override": "^3.0.0",
     "mongoose": "^8.0.4",
     "multer": "^1.4.5-lts.1",
-    "sinon": "^17.0.1",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.4"
   }
 }
