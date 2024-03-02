@@ -115,7 +115,6 @@ function visualiseNetwork(networkData) {
   });
 }
 
-<<<<<<< HEAD
 // function filterNodesByOrder(nodes) {
 //   console.log("filterNodesByOrder function called."); // Add this line
 //   nodes.forEach(node => {
@@ -135,17 +134,16 @@ function visualiseNetwork(networkData) {
 //       networkData.forEach(graph => {
 //         filterNodesByOrder(graph.nodes);
 //       });
-      
+
 //       visualiseNetwork(networkData);
 //     });
 //   } else {
 //     console.error("Filter button not found!");
 //   }
 // });
-=======
+
 const networkData = JSON.parse(
   document.getElementById('network-data').textContent
 );
->>>>>>> multiple-graphs
 
 visualiseNetwork(networkData);
