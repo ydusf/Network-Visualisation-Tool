@@ -1,10 +1,15 @@
-function handleResize(simulation, svg, width, height) {
-  simulation
-    .force('charge', d3.forceManyBody().strength(-(width * 0.25)))
-    .force('center', d3.forceCenter(width / 2, height / 2));
-  simulation.restart();
+function handleResize(networkData, simulation) {
+  networkData.forEach((graph, idx) => {
+    const svg = d3.select(`#svg-${idx}`);
+    const width = svg.node().getBoundingClientRect().width;
+    const height = svg.node().getBoundingClientRect().height;
 
-  svg.attr('width', width).attr('height', height);
+    simulation
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('charge', d3.forceManyBody().strength(-0.25 * width));
+
+    simulation.alpha(0.5).restart();
+  });
 }
 
 function drag(simulation) {
@@ -61,12 +66,6 @@ function ticked(link, node) {
   node.attr('cx', d => d.x).attr('cy', d => d.y);
 }
 
-const networkData = JSON.parse(
-  document.getElementById('network-data').textContent
-);
-
-console.log(networkData);
-
 const networkLinkColours = {
   'graph-0': ['white', '#12E1B9'],
   'graph-1': ['#4285F4', '#9C27B0'],
@@ -77,7 +76,9 @@ function visualiseNetwork(networkData) {
     const height = window.innerHeight;
     const width = window.innerWidth / networkData.length;
     const svg = d3
-      .select(`#svg-${idx}`)
+      .select('.network-container')
+      .append('svg')
+      .attr('id', `svg-${idx}`)
       .attr('width', width)
       .attr('height', height);
 
@@ -102,13 +103,14 @@ function visualiseNetwork(networkData) {
     const simulation = d3
       .forceSimulation(graph.nodes)
       .force('link', d3.forceLink().links(graph.links))
-      .force('charge', d3.forceManyBody().strength(-300))
+      .force('charge', d3.forceManyBody().strength(-0.25 * width))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', () => ticked(link, node));
 
     node.call(drag(simulation));
+
     window.addEventListener('resize', () =>
-      handleResize(simulation, svg, width, height)
+      handleResize(networkData, simulation)
     );
   });
 }
@@ -132,12 +134,16 @@ function visualiseNetwork(networkData) {
 //       networkData.forEach(graph => {
 //         filterNodesByOrder(graph.nodes);
 //       });
-      
+
 //       visualiseNetwork(networkData);
 //     });
 //   } else {
 //     console.error("Filter button not found!");
 //   }
 // });
+
+const networkData = JSON.parse(
+  document.getElementById('network-data').textContent
+);
 
 visualiseNetwork(networkData);
