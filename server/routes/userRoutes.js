@@ -31,6 +31,11 @@ router.get('/register', async (req, res) => {
   res.render('register');
 });
 
+//HOME PAGE
+router.get('/index', async (req, res) => {
+  res.render('index');
+});
+
 // POST - USER LOGIN
 router.post('/login', async (req, res) => {
   try {
