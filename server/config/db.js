@@ -14,6 +14,10 @@ const connectDB = async () => {
   }
 };
 
+const disconnectDB = async () => {
+  return mongoose.disconnect();
+};
+
 // async function deleteAllEntries() {
 //   try {
 //     // await User.deleteMany({});
@@ -37,4 +41,4 @@ const connectDB = async () => {
 
 // deleteAllEntries();
 
-module.exports = connectDB;
+module.exports = { connectDB, disconnectDB };
