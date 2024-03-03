@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const LinkSchema = new Schema(
   {
-    network_id: { type: Schema.Types.ObjectId, ref: "Network" },
+    network_id: { type: Schema.Types.ObjectId, ref: 'Network' },
     source: Object,
     target: Object,
     data: Object,
@@ -11,5 +11,5 @@ const LinkSchema = new Schema(
   { timestamps: true }
 );
 
-const Link = mongoose.model("Link", LinkSchema);
+const Link = mongoose.model('Link', LinkSchema);
 module.exports = Link;
