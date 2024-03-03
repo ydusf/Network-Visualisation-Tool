@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Page</title>
-    <link rel="stylesheet" type="text/css" href="/css/registration.css" />
-  </head>
-  <body>
-    <div class="container">
-      <div class="register-box">
-        <h3>Login</h3>
-        <br />
-        <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
-        <div style="color: red"><%= errorMessage %></div>
-        <% } %>
-        <br />
-        <form action="/login" method="POST">
-          <input type="text" placeholder="Enter username" name="username" />
-          <input type="password" placeholder="Enter password" name="password" />
-          <input type="submit" value="Login" class="register-btn btn" />
-        </form>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" type="text/css" href="/css/registration.css">
+</head>
+<body>
+  <div class="container">
+    <div class="register-box">
+      <h3>Login</h3>
+      <br />
+      <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+        <div style="color: red;">
+          <%= errorMessage %>
+        </div>
+      <% } %>
+      <br />
+      <form action="/login" method="POST">
+        <input type="text" placeholder="Enter username" name="username" />
+        <input type="password" placeholder="Enter password" name="password" />
+        <input type="submit" value="Login" class="register-btn btn" />
+      </form>
+      <a href="/register" class="signup-btn btn">Sign Up</a>
     </div>
   </body>
 </html>
