@@ -81,7 +81,8 @@ function visualiseNetwork(networkData) {
       .attr('width', width)
       .attr('height', height);
 
-    const container = svg.append('g');
+    const container = svg.append('g')
+      .attr('transform', `translate(${width / 2},${height / 2})`);
 
     function zoomed(event) {
       container.attr('transform', event.transform);
@@ -103,41 +104,47 @@ function visualiseNetwork(networkData) {
       .forceSimulation(graph.nodes)
       .force('link', d3.forceLink().links(graph.links))
       .force('charge', d3.forceManyBody().strength(-300))
-      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('center', d3.forceCenter(0, 0))
       .on('tick', () => ticked(link, node));
 
     node.call(drag(simulation));
     window.addEventListener('resize', () =>
       handleResize(simulation, svg, width, height)
     );
+
+    document.getElementById('filterButton').addEventListener('click', () => //dont think this working
+      filterNodesByOrder(graph.nodes)
+    );
+
   });
 }
 
-// function filterNodesByOrder(nodes) {
-//   console.log("filterNodesByOrder function called."); // Add this line
-//   nodes.forEach(node => {
-//     if (node.order > 3) {
-//       node.color = 'red'; // Example color
-//     }
-//   });
-// }
+function calculateNodeOrders(graph) {
+  let nodeOrders = [];
+  
+  graph.nodes.forEach(node => {
+      let order = graph.links.filter(link => link.source === node.id || link.target === node.id).length;   
+      nodeOrders.push(order);
+  });
+  
+  return nodeOrders;
+}
 
-// document.addEventListener('DOMContentLoaded', function() {
-//   const filterButton = document.getElementById('filter-button');
+function filterNodesByOrder(nodes) { //dont think this is ever called when button pressed
+  console.log("filterNodesByOrder function called.");
+  let nodeOrders = calculateNodeOrders(nodes);
+  let maxOrder = Math.max(...nodeOrders);
 
-//   if (filterButton) {
-//     filterButton.addEventListener('click', function(event) {
-//       event.preventDefault();
+  nodes.forEach((index) => {
+      //Scale between 0 and 1
+      let normalizedOrder = nodeOrders[index] / maxOrder;
 
-//       networkData.forEach(graph => {
-//         filterNodesByOrder(graph.nodes);
-//       });
-      
-//       visualiseNetwork(networkData);
-//     });
-//   } else {
-//     console.error("Filter button not found!");
-//   }
-// });
+      //Calculate colour based on order
+      let colour = `rgb(${255 * (1 - normalizedOrder)}, ${255 * normalizedOrder}, 0)`;
+
+      //Fill colour
+      d3.select(`#node-${index}`).style('fill', colour);
+  });
+}
 
 visualiseNetwork(networkData);
