@@ -1,11 +1,11 @@
 function handleResize(networkData, simulation) {
   networkData.forEach((graph, idx) => {
     const svg = d3.select(`#svg-${idx}`);
-    const width = svg.node().getBoundingClientRect().width;
-    const height = svg.node().getBoundingClientRect().height;
+    const width = svg.node().getBoundingClientRect().width / 2;
+    const height = svg.node().getBoundingClientRect().height / 2;
 
     simulation
-      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('center', d3.forceCenter(width, height))
       .force('charge', d3.forceManyBody().strength(-0.25 * width));
 
     simulation.alpha(0.5).restart();
@@ -74,7 +74,7 @@ const networkLinkColours = {
 function visualiseNetwork(networkData, linkStrength = -300) {
   networkData.forEach((graph, idx) => {
     const height = window.innerHeight;
-    const width = window.innerWidth / 2;
+    const width = window.innerWidth / networkData.length;
     const svg = d3
       .select('.network-container')
       .append('svg')
@@ -103,7 +103,7 @@ function visualiseNetwork(networkData, linkStrength = -300) {
     const simulation = d3
       .forceSimulation(graph.nodes)
       .force('link', d3.forceLink().links(graph.links))
-      .force('charge', d3.forceManyBody().strength(-0.25 * width))
+      .force('charge', d3.forceManyBody().strength((-0.25 * width) / 2))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', () => ticked(link, node));
 
