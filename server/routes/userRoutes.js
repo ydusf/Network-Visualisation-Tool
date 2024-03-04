@@ -17,18 +17,23 @@ router.post('/register', async (req, res) => {
       res.redirect('/login');
     } catch (error) {
       if (error.code === 11000) {
-        res.redirect('/register');
+        res.redirect('/login');
       }
       res.redirect('/register');
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
 // GET - USER REGISTER
 router.get('/register', async (req, res) => {
   res.render('register');
+});
+
+//HOME PAGE
+router.get('/index', async (req, res) => {
+  res.render('index');
 });
 
 // POST - USER LOGIN
@@ -60,9 +65,9 @@ router.post('/login', async (req, res) => {
 // GET - USER LOGIN
 router.get('/login', async (req, res) => {
   const errorMessage = req.query.error;
-  let message = "";
-  if(errorMessage === 'True') {
-    message = "Incorrect Username or Password";
+  let message = '';
+  if (errorMessage === 'True') {
+    message = 'Incorrect Username or Password';
   }
   // Pass the message to the template
   res.render('login', { errorMessage: message });

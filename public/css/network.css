@@ -14,14 +14,14 @@
 }
 
 .network-container {
-  padding: 0;
-  margin: 0;
+  width: 100%;
   height: 100vh;
   display: flex;
 }
 
 svg {
   min-width: 500px;
+  width: 100%;
   border: 1px solid var(--accent-color);
   margin-left: 80px;
 }
