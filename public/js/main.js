@@ -74,14 +74,13 @@ const networkLinkColours = {
 function visualiseNetwork(networkData) {
   networkData.forEach((graph, idx) => {
     const height = window.innerHeight;
-    const width = window.innerWidth;
+    const width = window.innerWidth / 2;
     const svg = d3
       .select('.network-container')
       .append('svg')
       .attr('id', `svg-${idx}`)
       .attr('width', width)
       .attr('height', height);
-    // .style('border', '1px solid green');
 
     const container = svg.append('g');
 
