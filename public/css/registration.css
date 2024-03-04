@@ -4,7 +4,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-family);
-  background-color: var(--secondary-color);
+  background-image: url("/img/backgrounds/test2.jpg");
+  background-size: 100% 100%;
 }
 
 .container {
@@ -15,10 +16,13 @@ body {
 }
 
 .register-box {
-  background-color: var(--primary-color);
+  background: transparent;
   text-align: center;
-  border: solid var(--secondary-color) 2px;
+  border: 2px solid rgba(255, 255, 255, .5);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
   padding: 40px;
+border-radius: 10px;
 }
 
 h3 {

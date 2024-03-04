@@ -54,7 +54,7 @@
 }
 
 .navbar:hover {
-  width: 16rem;
+  width: 20rem;
 }
 
 .navbar:hover .link-text {
@@ -80,4 +80,61 @@
 
 .navbar:hover .logo i {
   transform: rotate(-360deg);
+}
+
+.file-upload {
+  width: 90%;
+  color: var(--primary-color);
+  background: white;
+  border-radius: 10px;
+  border: none;
+}
+
+.file-upload::-webkit-file-upload-button {
+  font-weight: bold;
+  padding: 0.4rem;
+  background: var(--accent-color);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 10px;
+  transition: var(--transition-speed);
+}
+
+.import-btn {
+  font-weight: bold;
+  margin-top: 0.6rem;
+  padding: 0.1rem 0.4rem;
+  background: var(--accent-color);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 10px;
+  transition: var(--transition-speed);
+}
+
+.nav-link:hover .file-upload::-webkit-file-upload-button, .nav-link:hover .import-btn{
+  background: var(--primary-color);
+  color: var(--text-color);
+}
+
+.nav-link:hover .file-upload::-webkit-file-upload-button:hover, 
+.nav-link:hover .import-btn:hover{
+  background: slategray;
+  color: var(--text-color);
+}
+
+#style-options {
+  display: none;
+  width: 100%;
+}
+
+#link-strength {
+  width: 20%;
+}
+
+#drop-arrow {
+  transition: transform var(--transition-speed) ease;
+}
+
+.rotateArrow {
+  transform: rotate(180deg);
 }

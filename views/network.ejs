@@ -4,7 +4,7 @@
 
 <%- include('./partials/header') %>
 
-<div class="network-container">
+<div id="network-container" class="network-container" >
   <svg style="display: hidden" id="svg-0"></svg>
   <svg style="display: hidden" id="svg-1"></svg>
 </div>
@@ -13,4 +13,12 @@
   <%= JSON.stringify(networksData) %>
 </div>
 
-<script type="module" defer src="/js/main.min.js"></script>
+<div id="edit-menu">
+  <ul class="edit-list">
+    <li class="edit-item">Option 1</li>
+    <li class="edit-item">Option 2</li>
+    <li class="edit-item">Option 3</li>
+  </ul>
+</div>
+
+<script type="module" defer src="/js/main.js"></script>

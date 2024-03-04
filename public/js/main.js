@@ -72,7 +72,7 @@ const networkLinkColours = {
   'graph-1': ['#4285F4', '#9C27B0'],
 };
 
-function visualiseNetwork(networkData) {
+function visualiseNetwork(networkData, linkStrength = -300) {
   networkData.forEach((graph, idx) => {
     const height = window.innerHeight;
     const width = window.innerWidth / networkData.length;
@@ -102,7 +102,7 @@ function visualiseNetwork(networkData) {
     const simulation = d3
       .forceSimulation(graph.nodes)
       .force('link', d3.forceLink().links(graph.links))
-      .force('charge', d3.forceManyBody().strength(-300))
+      .force('charge', d3.forceManyBody().strength(linkStrength))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', () => ticked(link, node));
 
@@ -121,23 +121,5 @@ function visualiseNetwork(networkData) {
 //     }
 //   });
 // }
-
-// document.addEventListener('DOMContentLoaded', function() {
-//   const filterButton = document.getElementById('filter-button');
-
-//   if (filterButton) {
-//     filterButton.addEventListener('click', function(event) {
-//       event.preventDefault();
-
-//       networkData.forEach(graph => {
-//         filterNodesByOrder(graph.nodes);
-//       });
-      
-//       visualiseNetwork(networkData);
-//     });
-//   } else {
-//     console.error("Filter button not found!");
-//   }
-// });
 
 visualiseNetwork(networkData);

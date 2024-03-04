@@ -18,10 +18,11 @@
             <input
               type="file"
               name="files"
+              class="file-upload"
               accept=".csv, .json, .graphml"
               multiple
             />
-            <input type="submit" value="Import Network" />
+            <input type="submit" value="Import Network" class="import-btn"/>
           </span>
         </a>
       </form>
@@ -44,6 +45,34 @@
         <span class="link-text">Filter</span>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="#" id="style-button" class="nav-link" >
+        <i class="fa-solid fa-paintbrush"></i>
+        <span class="link-text">Style</span>
+        <i class="fa-solid fa-chevron-down link-text" id="drop-arrow"></i>
+      </a>
+    </li>
+    <div id="style-options">
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <label for="node-colour" class="link-text">Node Colour</label>
+          <input type="color" id="node-colour" class="link-text">
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <label for="link-colour" class="link-text">Link Colour</label>
+          <input type="color" id="link-colour" class="link-text">
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <label for="link-strength" class="link-text">Link Strength</label>
+          <input type="number" id="link-strength" class="link-text">
+          <button type="button" id="apply-button" class="link-text">Apply</button>
+        </a>
+      </li>
+    </div>
     <li class="nav-item">
       <a href="/logout" class="nav-link">
         <i class="fa-solid fa-sign-out-alt"></i>

@@ -1,7 +1,7 @@
 @import 'globals.css';
 
 .node {
-  /* fill: var(--accent-color); */
+  fill: red;
   stroke: var(--secondary-color);
   stroke-width: 2px;
   cursor: pointer;
@@ -24,4 +24,30 @@ svg {
   min-width: 500px;
   border: 1px solid var(--accent-color);
   margin-left: 80px;
+}
+
+#edit-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  height: 15vh;
+  width: 10vw;
+  z-index: 1000;
+}
+
+.edit-list{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.edit-item {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  height: 2rem;
 }
