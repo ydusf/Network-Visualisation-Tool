@@ -71,8 +71,10 @@ const networkLinkColours = {
   'graph-1': ['#4285F4', '#9C27B0'],
 };
 
-function visualiseNetwork(networkData, linkStrength = -300) {
+function visualiseNetwork(networkData) {
   networkData.forEach((graph, idx) => {
+    console.log(graph);
+
     const height = window.innerHeight;
     const width = window.innerWidth / networkData.length;
     const svg = d3
@@ -146,4 +148,6 @@ const networkData = JSON.parse(
   document.getElementById('network-data').textContent
 );
 
-visualiseNetwork(networkData);
+document.addEventListener('DOMContentLoaded', function() {
+  visualiseNetwork(networkData);
+}); 

@@ -25,12 +25,13 @@ router.get('/network', authValidator, async (req, res) => {
 
     if (userNetworks.length > 0) {
       for (const network of userNetworks) {
-        const nodes = await Node.find({ _id: { $in: network.nodes } });
-        const links = await Link.find({ _id: { $in: network.links } });
-
+        const [nodes, links] = await Promise.all([
+          Node.find({ _id: { $in: network.nodes } }),
+          Link.find({ _id: { $in: network.links } })
+        ]);
         networksData.push({ nodes, links });
       }
-    }
+   }
 
     res.render('network', { networksData: networksData });
   } catch (error) {
@@ -53,11 +54,11 @@ router.post(
         return res.status(400).json({ error: 'No file uploaded.' });
       }
 
-      files.forEach(async file => {
+      await files.forEach(file => {
         // Convert file data to JSON
         console.log(file.originalname);
         const fileExt = file.originalname.split('.').pop().toLowerCase();
-        const fileContent = await convertData(file.buffer.toString(), fileExt);
+        const fileContent = convertData(file.buffer.toString(), fileExt);
 
         // Validate file content
         if (!fileContent.nodes || !fileContent.links) {
@@ -68,7 +69,7 @@ router.post(
         const nodes = fileContent.nodes;
         const links = fileContent.links;
 
-        await createNetwork(nodes, links, req.user._id);
+        createNetwork(nodes, links, req.user._id);
       });
 
       res.redirect('/network');
