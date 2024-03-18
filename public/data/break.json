@@ -1,0 +1,60 @@
+{
+  "nodes": [
+    {
+      "name": "Sebastian",
+      "value": 1
+    },
+    {
+      "name": "Zach",
+      "value": 2
+    },
+    {
+      "name": "Ryan Tresman",
+      "value": 3
+    },
+    {
+      "name": "Jim",
+      "value": 4
+    },
+    {
+      "name": "John",
+      "value": 5
+    },
+    {
+      "name": "Jack",
+      "value": 6
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "target": 2,
+      "value": 8
+    },
+    {
+      "source": 2,
+      "target": 3,
+      "value": 12
+    },
+    {
+      "source": 3,
+      "target": 1,
+      "value": 16
+    },
+    {
+      "source": 4,
+      "target": 5,
+      "value": 8
+    },
+    {
+      "source": 5,
+      "target": 6,
+      "value": 12
+    },
+    {
+      "source": 6,
+      "target": 4,
+      "value": 16
+    }
+  ]
+}

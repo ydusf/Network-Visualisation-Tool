@@ -6,9 +6,9 @@ function handleResize(networkData, simulation) {
 
     simulation
       .force('center', d3.forceCenter(width, height))
-      .force('charge', d3.forceManyBody().strength(-0.25 * width));
-
-    simulation.alpha(0.5).restart();
+      .force('charge', d3.forceManyBody().strength(-0.25 * width))
+      .alpha(0.5)
+      .restart();
   });
 }
 
@@ -38,6 +38,7 @@ function drag(simulation) {
 }
 
 function createLinksAndNodes(svg, graph) {
+
   const link = svg
     .append('g')
     .selectAll('line')
@@ -66,17 +67,77 @@ function ticked(link, node) {
   node.attr('cx', d => d.x).attr('cy', d => d.y);
 }
 
-const networkLinkColours = {
+async function depthFirstTraversal(start, end, graph, link, node) {
+  let visited = {};
+  let stack = [];
+  let prevNode = null;
+
+  stack.push(start);
+
+  console.log(start);
+  console.log(end);
+
+  while (stack.length > 0) {
+
+    const curNode = stack.pop();
+    const curNodeId = curNode._id;
+
+
+    if (!visited[curNodeId]) {
+      await new Promise(resolve => setTimeout(resolve, 250));
+      visited[curNodeId] = true;
+
+      node
+        .filter(d => d === curNode && d !== start && d !== end)
+        .style('fill', 'black');
+      // link
+      //   .filter(d => d.source === curNode || d.target === curNode)
+      //   .style('stroke', 'orange');
+      
+      if (prevNode) {
+        link
+          .filter(d => (d.source === prevNode && d.target === curNode) || (d.source === curNode && d.target === prevNode))
+          .style('stroke', 'red');
+      }
+
+      if (curNodeId === end._id) {
+        console.log('FOUND');
+        return true;
+      }
+
+      const neighbors = graph.links
+        .filter(d => d.source === curNode || d.target === curNode)
+        .map(d => (d.source === curNode ? d.target : d.source));
+
+
+
+      neighbors.forEach(neighbor => {
+        if (!visited[neighbor._id]) {
+          stack.push(neighbor);
+        }
+      });
+
+      prevNode = curNode;
+    }
+  }
+
+  return false;
+}
+
+const networkLinkColor = {
   'graph-0': ['white', '#12E1B9'],
   'graph-1': ['#4285F4', '#9C27B0'],
 };
 
 function visualiseNetwork(networkData) {
-  networkData.forEach((graph, idx) => {
-    console.log(graph);
+  d3.selectAll('svg').remove();
 
+  networkData.forEach((graph, idx) => {
     const height = window.innerHeight;
     const width = window.innerWidth / networkData.length;
+    let startNode = null;
+    let endNode = null;
+
     const svg = d3
       .select('.network-container')
       .append('svg')
@@ -87,6 +148,9 @@ function visualiseNetwork(networkData) {
     const container = svg.append('g');
 
     function zoomed(event) {
+      let transform = event.transform;
+      node.attr("r", 6 / transform.k);
+      link.style("stroke-width", 1 / transform.k);
       container.attr('transform', event.transform);
       ticked(link, node);
     }
@@ -98,14 +162,24 @@ function visualiseNetwork(networkData) {
     svg.call(zoom);
 
     const { link, node } = createLinksAndNodes(container, graph);
-
-    link.style('stroke', networkLinkColours[`graph-${idx}`][0]);
-    node.style('fill', networkLinkColours[`graph-${idx}`][1]);
+    
+    link.style('stroke', networkLinkColor[`graph-${idx}`][0]);
+    node
+      .on('click', function(event, d) {
+        if (startNode === null) {
+          startNode = d;
+          d3.select(this).style('fill', 'green');
+        } else if (endNode === null) {
+          endNode = d;
+          d3.select(this).style('fill', 'red');
+        }
+      })
+      .style('fill', networkLinkColor[`graph-${idx}`][1]);
 
     const simulation = d3
       .forceSimulation(graph.nodes)
       .force('link', d3.forceLink().links(graph.links))
-      .force('charge', d3.forceManyBody().strength((-0.25 * width) / 2))
+      .force('charge', d3.forceManyBody().strength(-(0.25 * width)))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .on('tick', () => ticked(link, node));
 
@@ -114,6 +188,12 @@ function visualiseNetwork(networkData) {
     window.addEventListener('resize', () =>
       handleResize(networkData, simulation)
     );
+
+    window.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' && startNode !== null && endNode !== null) {
+        depthFirstTraversal(startNode, endNode, graph, link, node);
+      }
+    });
   });
 }
 
@@ -144,10 +224,8 @@ function visualiseNetwork(networkData) {
 //   }
 // });
 
-const networkData = JSON.parse(
-  document.getElementById('network-data').textContent
-);
-
 document.addEventListener('DOMContentLoaded', function() {
+  const networkData = JSON.parse(document.getElementById('network-data').textContent);
+  console.log(networkData);
   visualiseNetwork(networkData);
-}); 
+});
