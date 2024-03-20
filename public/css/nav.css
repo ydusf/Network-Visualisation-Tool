@@ -116,7 +116,7 @@
   color: var(--text-color);
 }
 
-.nav-link:hover .file-upload::-webkit-file-upload-button:hover, 
+.file-upload::-webkit-file-upload-button:hover, 
 .nav-link:hover .import-btn:hover{
   background: slategray;
   color: var(--text-color);

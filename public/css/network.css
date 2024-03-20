@@ -10,7 +10,14 @@
 .link {
   /* stroke: white; */
   stroke-opacity: 0.6;
-  stroke-width: 3;
+  stroke-width: 2px;
+}
+
+.texts {
+  fill: red;
+  font-size: 12px;
+  text-anchor: middle;
+  font-weight: bold;
 }
 
 .network-container {

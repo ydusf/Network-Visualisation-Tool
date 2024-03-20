@@ -26,6 +26,8 @@ router.get('/network', authValidator, async (req, res) => {
     
     const networksData = await renderNetwork(user, fetchLimit);
 
+    console.log(networksData);
+
     res.render('network', { networksData: networksData });
   } catch (error) {
     console.error(error);
@@ -73,6 +75,10 @@ router.post(
     }
   }
 );
+
+router.get('/analytics', authValidator, async (req, res) => {
+  res.render('analytics')
+});
 
 // DELETE - DELETE ALL NETWORKS
 
