@@ -90,9 +90,9 @@ async function depthFirstTraversal(start, end, graph, link, node) {
       node
         .filter(d => d === curNode && d !== start && d !== end)
         .style('fill', 'black');
-      // link
-      //   .filter(d => d.source === curNode || d.target === curNode)
-      //   .style('stroke', 'orange');
+      link
+        .filter(d => d.source === curNode || d.target === curNode)
+        .style('stroke', 'yellow');
       
       if (prevNode) {
         link
@@ -108,8 +108,6 @@ async function depthFirstTraversal(start, end, graph, link, node) {
       const neighbors = graph.links
         .filter(d => d.source === curNode || d.target === curNode)
         .map(d => (d.source === curNode ? d.target : d.source));
-
-
 
       neighbors.forEach(neighbor => {
         if (!visited[neighbor._id]) {
@@ -148,9 +146,9 @@ function visualiseNetwork(networkData) {
     const container = svg.append('g');
 
     function zoomed(event) {
-      let transform = event.transform;
-      node.attr("r", 6 / transform.k);
-      link.style("stroke-width", 1 / transform.k);
+      // let transform = event.transform;
+      // node.attr("r", 6 / transform.k);
+      // link.style("stroke-width", 1 / transform.k);
       container.attr('transform', event.transform);
       ticked(link, node);
     }
