@@ -26,8 +26,6 @@ router.get('/network', authValidator, async (req, res) => {
     
     const networksData = await renderNetwork(user, fetchLimit);
 
-    console.log(networksData);
-
     res.render('network', { networksData: networksData });
   } catch (error) {
     console.error(error);

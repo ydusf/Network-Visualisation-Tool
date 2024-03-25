@@ -1,29 +1,30 @@
 @import 'globals.css';
 
 .node {
-  fill: red;
+  fill: var(--accent-color);
   stroke: var(--secondary-color);
   stroke-width: 2px;
   cursor: pointer;
 }
 
 .link {
-  /* stroke: white; */
+  stroke: white;
   stroke-opacity: 0.6;
   stroke-width: 2px;
 }
 
 .texts {
   fill: red;
-  font-size: 12px;
+  font-size: 18px;
   text-anchor: middle;
   font-weight: bold;
 }
 
 .network-container {
-  width: 100%;
+  width: calc(100% - 80px);
   height: 100vh;
   display: flex;
+  float: right;
 }
 
 svg {
