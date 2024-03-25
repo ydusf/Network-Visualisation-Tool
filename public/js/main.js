@@ -20,6 +20,8 @@ function createSvg(numGraphs, idx) {
     .attr("height", height);
 };
 function createLinksAndNodes(container, links, nodes) {
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
+  
   const link = container
     .append('g')
     .selectAll('line')
@@ -35,7 +37,8 @@ function createLinksAndNodes(container, links, nodes) {
     // .enter().append("circle")
     .join("circle")
     .attr("r", 5)
-    .attr('class', 'node');
+    .attr('class', 'node')
+    .attr('fill', d => color(d.group));
 
   const texts = container
     .append('g')
@@ -121,6 +124,24 @@ function addAttributes(nodes, links) {
   // creates array of links attribute for each node
   nodes.forEach(node => {
     node.links = links.filter(link => link.source._id === node._id || link.target._id === node._id);
+    const nodeDegree = node.links.length;
+
+    if (nodeDegree >= 10 && nodeDegree < 20) {
+      node.group = 1;
+    } else if (nodeDegree >= 20 && nodeDegree < 30) {
+      node.group = 2;
+    } else if (nodeDegree >= 30 && nodeDegree < 40) {
+      node.group = 3;
+    } else if (nodeDegree >= 40 && nodeDegree < 50) {
+      node.group = 4;
+    } else if (nodeDegree >= 50 && nodeDegree < 60) {
+      node.group = 5;
+    } else if (nodeDegree >= 60) {
+      node.group = 6;
+    } else {
+      node.group = 0;
+    }
+
   });
 };
 async function timedExecution(callback, delay, timerText) {
@@ -310,9 +331,8 @@ function initialiseConstants(graph, numGraphs) {
   const nodes = graph.nodes.map(d => ({...d}));
   const width = window.innerWidth / numGraphs;
   const height = window.innerHeight;
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  return [nodes, links, width, height, color];
+  return [nodes, links, width, height];
 };
 function setup(nodes, links, width, height, numGraphs, idx) {
   const simulation = createSimulation(nodes, links, width, height);
@@ -320,6 +340,9 @@ function setup(nodes, links, width, height, numGraphs, idx) {
   const container = svg.append('g');
   addAttributes(nodes, links);
   const { link, node, texts } = createLinksAndNodes(container, links, nodes);
+  svg.call(createZoom(link, node, texts, container));
+  simulation.on('tick', () => ticked(link, node, texts));
+  node.call(drag(simulation));
 
   return [simulation, svg, container, link, node, texts];
 };
@@ -354,7 +377,7 @@ function visualiseNetwork(networkData) {
     let startNode = null;
     let endNode = null;
 
-    const [nodes, links, width, height, color] = initialiseConstants(graph, numGraphs);
+    const [nodes, links, width, height] = initialiseConstants(graph, numGraphs);
     const [simulation, svg, container, link, node, texts] = setup(nodes, links, width, height, numGraphs, idx);
     const [timerText, maxNodeText, avgDegreeText] = setupMetrics(svg, nodes);
 
@@ -368,10 +391,6 @@ function visualiseNetwork(networkData) {
           d3.select(this).style('fill', 'red');
         }
       });
-
-    node.call(drag(simulation));
-    svg.call(createZoom(link, node, texts, container));
-    simulation.on('tick', () => ticked(link, node, texts));
 
     window.addEventListener('resize', () =>
       handleResize(networkData, simulation)
