@@ -27,7 +27,7 @@ function styleTraversedPath(node, link, prevNode, curNodeId, startId, endId, nod
       .style('stroke-opacity', '1');
   }
 }
-function styleShortestPath(node, link, path, idx, startId, endId, nodeColour, linkColour) {
+function styleShortestPath(node, link, path, idx, startId, endId, nodeColour, linkColour) {  
   node
     .filter(d => d._id === path[idx] && d._id !== startId && d._id !== endId)
     .style('fill', nodeColour);
@@ -50,6 +50,8 @@ function traverseShortestPath(node, link, nodes, prevNode, curNodeId, startId, e
 
   const shortestPath = path.length;
   let avgDegree = d3.mean(nodes.filter(d => path.includes(d._id)), d => d.links.length).toFixed(2);
+
+  resetGraph(node, link);
   
   for (let i = 0; i < shortestPath; i++) {
     setTimeout(() => {
@@ -205,5 +207,11 @@ async function aStarTraversal(start, end, links, nodes, link, node, textTimer) {
     return {shouldContinue: false, shortestPath, avgDegree};
   }, textTimer);
 };
+function resetGraph(node, link) {
+  node.style('fill', 'rgb(18, 225, 185)');
+  node.attr('r', 5);
+  link.style('stroke', 'white');
+  link.style('stroke-width', '2px');
+}
 
-export { breadthFirstTraversal, depthFirstTraversal, aStarTraversal };
+export { resetGraph, breadthFirstTraversal, depthFirstTraversal, aStarTraversal };

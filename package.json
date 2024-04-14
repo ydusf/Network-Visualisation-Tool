@@ -7,7 +7,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "start": "app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^8.0.4",
     "multer": "^1.4.5-lts.1",
+    "netclustering": "^0.0.7",
     "socket.io": "^4.7.4",
     "xml2js": "^0.6.2"
   },
@@ -42,6 +44,9 @@
     "jest": "^29.7.0",
     "mongoose-mock": "^0.4.0",
     "nodemon": "^3.0.1",
-    "supertest": "^6.3.4"
+    "style-loader": "^3.3.4",
+    "supertest": "^6.3.4",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   }
 }
