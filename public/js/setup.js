@@ -1,8 +1,16 @@
+import netClustering from "netclustering";
+
 function createSimulation(nodes, links, width, height) {
+  const density = nodes.length * (width / height);
+
+  const maxForceStrength = 75;
+  const forceStrength = -Math.min(density, maxForceStrength);
+
+
   return d3
     .forceSimulation(nodes)
     .force("link", d3.forceLink().links(links))
-    .force('charge', d3.forceManyBody().strength(-(0.25 * width)))
+    .force('charge', d3.forceManyBody().strength(forceStrength))
     .force('center', d3.forceCenter(width / 2, height / 2));
 };
 function createSvg(numGraphs, idx) {
@@ -11,34 +19,47 @@ function createSvg(numGraphs, idx) {
   const rect = networkContainer.node().getBoundingClientRect();
   const width = rect.width / numGraphs;
   const height = rect.height;
-  
 
-  return networkContainer
+  const svg = networkContainer
     .append('svg')
     .attr('id', `svg-${idx}`)
     .attr("width", width)
     .attr("height", height);
+
+  return svg;
 };
 function createLinksAndNodes(container, links, nodes) {
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
-  
+  const arrows = container
+    .append("defs")
+    .selectAll("marker")
+    .data(["arrow"])
+    .join("marker")
+    .attr("id", d => d)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 15)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+    .attr('class', 'arrow')
+    .append("path")
+    .attr("d", "M0,-5L10,0L0,5");
+
   const link = container
     .append('g')
     .selectAll('line')
     .data(links)
-    // .enter().append("line")
     .join("line")
-    .attr('class', 'link');
-    
+    .attr('class', 'link')
+    .attr("marker-end", "url(#arrow)");
+
   const node = container
     .append('g')
     .selectAll('circle')
     .data(nodes)
-    // .enter().append("circle")
     .join("circle")
     .attr("r", 5)
     .attr('class', 'node')
-    .attr('fill', d => color(d.group));
+    .attr('fill', 'rgb(18, 225, 185)');
 
   const texts = container
     .append('g')
@@ -49,7 +70,7 @@ function createLinksAndNodes(container, links, nodes) {
     .style("pointer-events", "none");
     // .text(d => d.label);
 
-  return { link, node, texts };
+  return { link, node, texts, arrows };
 };
 function ticked(link, node, texts) {
   texts
@@ -90,19 +111,20 @@ function drag(simulation) {
     .on('drag', dragged)
     .on('end', dragend);
 };
-function createZoom(link, node, texts, container) {
+function createZoom(link, node, texts, arrows, container) {
   function zoomed(event) {
     const transform = event.transform;
     node.style('stroke-width', 2 / transform.k);
     link.style('stroke-width', 2 / transform.k);
     texts.style('font-size', 18 / transform.k);
+    arrows.style('stroke-width', 2 / transform.k);
     container.attr('transform', transform);
     ticked(link, node, texts);
   }
 
   return d3
     .zoom()
-    .scaleExtent([0.1, 5])
+    .scaleExtent([0.1, 10])
     .duration(100)
     .on('zoom', zoomed);
 };
@@ -120,26 +142,49 @@ function handleResize(networkData, simulation) {
       .restart();
   });
 };
+function groupArrays(nodes, links, maxDepth) {
+  const groups = netClustering.cluster(nodes, links);
+  const hashMap = {};
+  let index = 0;
+
+  function traverseArray(groups, depth) {
+    groups.forEach((elem) => {
+      if (Array.isArray(elem) && depth < maxDepth) {
+        traverseArray(elem, depth + 1);
+      } else {
+        if (!hashMap[index]) {
+          hashMap[index] = [];
+        }
+        hashMap[index].push(elem);
+      }
+    });
+    index++;
+  }
+
+  traverseArray(groups, 0);
+
+  for (const key in hashMap) {
+    if (Object.hasOwnProperty.call(hashMap, key)) {
+      const group = hashMap[key].flat(Infinity);
+      for(const idx in group) {
+        const curElem = group[idx];
+        const nodeIdx = Number(curElem);
+        nodes[nodeIdx].cluster = key;
+      };
+    }
+  }
+}
 function addAttributes(nodes, links) {
-  // creates array of links attribute for each node
+  groupArrays(nodes, links, 1);
+
   nodes.forEach(node => {
     node.links = links.filter(link => link.source._id === node._id || link.target._id === node._id);
     const nodeDegree = node.links.length;
 
-    if (nodeDegree >= 10 && nodeDegree < 20) {
-      node.group = 1;
-    } else if (nodeDegree >= 20 && nodeDegree < 30) {
-      node.group = 2;
-    } else if (nodeDegree >= 30 && nodeDegree < 40) {
-      node.group = 3;
-    } else if (nodeDegree >= 40 && nodeDegree < 50) {
-      node.group = 4;
-    } else if (nodeDegree >= 50 && nodeDegree < 60) {
-      node.group = 5;
-    } else if (nodeDegree >= 60) {
-      node.group = 6;
-    } else {
+    if (nodeDegree < 10) {
       node.group = 0;
+    } else {
+      node.group = Math.floor((nodeDegree - 1) / 10) + 1;
     }
 
   });
@@ -157,12 +202,12 @@ function setup(nodes, links, width, height, numGraphs, idx) {
   const svg = createSvg(numGraphs, idx);
   const container = svg.append('g');
   addAttributes(nodes, links);
-  const { link, node, texts } = createLinksAndNodes(container, links, nodes);
-  svg.call(createZoom(link, node, texts, container));
+  const { link, node, texts, arrows } = createLinksAndNodes(container, links, nodes);
+  svg.call(createZoom(link, node, texts, arrows, container));
   simulation.on('tick', () => ticked(link, node, texts));
   node.call(drag(simulation));
 
-  return [simulation, svg, container, link, node, texts];
+  return [simulation, svg, container, link, node, texts, arrows];
 };
 
 export { initialiseConstants, setup, handleResize };
