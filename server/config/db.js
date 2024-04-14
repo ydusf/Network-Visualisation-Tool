@@ -20,8 +20,8 @@ const disconnectDB = async () => {
 
 // async function deleteAllEntries() {
 //   try {
-//     // await User.deleteMany({});
-//     // console.log('Users deleted successfully.');
+//     await User.deleteMany({});
+//     console.log('Users deleted successfully.');
 
 //     await Network.deleteMany({});
 //     console.log('Networks deleted successfully.');
