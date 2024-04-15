@@ -79,6 +79,11 @@ a {
   background-color: darken(var(--accent-color), 10%);
 }
 
+.signup-btn {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
 .swirl-img {
   height: 80vh;
   float: right;

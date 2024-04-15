@@ -1,4 +1,5 @@
 require('dotenv').config(); // Load environment variables from a .env file
+const path = require('path');
 
 const express = require('express'); // Import the Express.js framework
 
@@ -39,7 +40,7 @@ app.use(
   })
 );
 
-app.use(express.static('public')); // Serve static files from the 'public' directory
+app.use(express.static('public'));
 
 // Templating Engine Configuration
 app.use(expressLayout); // Use EJS layouts
