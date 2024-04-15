@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedNodeSizeNumeric = document.getElementById('selected-node-size-numeric');
   const selectedNodeLinkColour = document.getElementById('selected-node-links');
   
-  var selected;
-  var previousColour;
-  var selectedType;
+  let selected;
+  let previousColour;
+  let selectedType;
 
   styleButton.addEventListener('click', () => {
     toggleDropdown();

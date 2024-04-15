@@ -45,11 +45,11 @@
 
 <%- include('./partials/header') %>
 
-<div class="network-container"></div>
-
+<div class="network-container">
   <div id="network-data" style="display: none">
     <%= JSON.stringify(networksData) %>
   </div>
+</div>
 
 <div id="edit-menu">
   <ul class="edit-list">
@@ -68,47 +68,3 @@
     </li>
   </ul>
 </div>
-
-<script>
-  dragElement(document.getElementById("dropDownDiv"));
-  
-  function dragElement(elmnt) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    elmnt.onmousedown = dragMouseDown;
-  
-    function dragMouseDown(e) {
-      e = e || window.event;
-      e.preventDefault();
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      document.onmousemove = elementDrag;
-    }
-  
-    function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-
-      let newTop = elmnt.offsetTop - pos2;
-      let newLeft = elmnt.offsetLeft - pos1;
-
-      if (newTop < 0) newTop = 0;
-      if (newLeft < 0) newLeft = 0;
-      if (newTop > window.innerHeight - elmnt.offsetHeight) newTop = window.innerHeight - elmnt.offsetHeight;
-      if (newLeft > window.innerWidth - elmnt.offsetWidth) newLeft = window.innerWidth - elmnt.offsetWidth;
-
-      elmnt.style.top = newTop + "px";
-      elmnt.style.left = newLeft + "px";
-    }
-  
-    function closeDragElement() {
-      document.onmouseup = null;
-      document.onmousemove = null;
-    }
-  }
-</script>
-

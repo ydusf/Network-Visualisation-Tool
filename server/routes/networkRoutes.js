@@ -74,10 +74,6 @@ router.post(
   }
 );
 
-router.get('/analytics', authValidator, async (req, res) => {
-  res.render('analytics')
-});
-
 // DELETE - DELETE ALL NETWORKS
 
 module.exports = router;

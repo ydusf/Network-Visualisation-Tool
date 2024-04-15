@@ -121,7 +121,7 @@ function visualiseNetwork(networkData) {
         node.style('fill', nodeColour);
         link.style('stroke', linkColour);
 
-      } else if(event.key === 'd') {
+      } else if(event.key === 'l') {
         d3.selectAll('.arrow').attr('visibility', arrowsHidden ? 'visible' : 'hidden');
         arrowsHidden = !arrowsHidden;
       } else if(event.key === 't') {
