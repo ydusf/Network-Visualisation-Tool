@@ -48,13 +48,34 @@ input {
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+  padding: 5px;
+  margin-bottom: 15px;
+  border: 1px solid var(--text-color);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
 .register-btn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.register-btn:hover {
+  background-color: darken(var(--accent-color), 10%);
+}
+
+.signup-btn {
+  font-size: 12px;
   background-color: var(--accent-color);
   color: var(--text-color);
   cursor: pointer;
 }
 
-.register-btn:hover {
+.signup-btn:hover {
   background-color: darken(var(--accent-color), 10%);
 }
 

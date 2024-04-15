@@ -5,17 +5,27 @@
 
 <%- include('./partials/header') %>
 
-<div class="network-container">
+<div class="network-container"></div>
+
   <div id="network-data" style="display: none">
     <%= JSON.stringify(networksData) %>
   </div>
-</div>
 
 <div id="edit-menu">
   <ul class="edit-list">
-    <li class="edit-item">Option 1</li>
-    <li class="edit-item">Option 2</li>
-    <li class="edit-item">Option 3</li>
+    <li class="edit-item">
+      <label for="selected-colour">Colour</label>
+      <input type="color" value="#12ffb9" id="selected-colour">
+    </li>
+    <li class="edit-item">
+      <label for="selected-node-size-slider">Node Size</label>
+      <input type="range" min="5" max="30" value="5" id="selected-node-size-slider">
+      <input type="number" min="5" max="30" value="5" id="selected-node-size-numeric">
+    </li>
+    <li class="edit-item">
+      <label for="selected-node-links">Node Link Colour</label>
+      <input type="color" value="#FFFFFF" id="selected-node-links">
+    </li>
   </ul>
 </div>
 
