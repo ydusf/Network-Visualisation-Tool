@@ -10,8 +10,6 @@ async function renderNetwork(user, fetchLimit) {
 
   let networksData = [];
 
-  console.log(userNetworks);
-
   if (userNetworks.length > 0) {
     networksData = await Promise.all(
       userNetworks.map(async (network) => {

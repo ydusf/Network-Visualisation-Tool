@@ -6,7 +6,6 @@ function createSimulation(nodes, links, width, height) {
   const maxForceStrength = 75;
   const forceStrength = -Math.min(density, maxForceStrength);
 
-
   return d3
     .forceSimulation(nodes)
     .force("link", d3.forceLink().links(links))

@@ -1,33 +1,50 @@
 import { resetGraph, breadthFirstTraversal, depthFirstTraversal, aStarTraversal } from "./search.js";
 import { initialiseConstants, setup, handleResize } from "./setup.js";
+import { graphEditDistance } from "./analysis.js";
 
-function setupMetrics(svg, nodes) {
+const networkData = JSON.parse(document.getElementById('network-data').textContent);
+
+function createText(svg, x, y, str) {
+  svg.append('text')
+    .attr('x', x)
+    .attr('y', y)
+    .text(str)
+    .attr('fill', 'rgb(18, 225, 185)');
+}
+
+function setupDocTexts(svg) {
+  const networkContainer = d3.select('.network-container');
+  const rect = networkContainer.node().getBoundingClientRect();
+  const height = rect.height;
+
+  createText(svg, 10, height-10, 'c: cluster nodes');
+  createText(svg, 10, height-30, 'a: A* traversal');
+  createText(svg, 10, height-50, 'd: DFS traversal');
+  createText(svg, 10, height-70, 'b: BFS traversal');
+  createText(svg, 10, height-90, 'g: degree-based styling');
+  createText(svg, 10, height-110, 'n: reset styles');
+  createText(svg, 10, height-130, 'm: highlight highest degree');
+  createText(svg, 10, height-150, 'h: cluster nodes by degree');
+  createText(svg, 10, height-170, 'c: colour presets');
+  createText(svg, 10, height-190, 'l: enable arrows');
+  createText(svg, 10, height-210, 't: enable labels');
+}
+
+function setupMetrics(svg, nodes, links) {
   const avgDegree = d3.mean(nodes, d => d.links.length);
   const maxNode = nodes.reduce((a, b) => a.links.length > b.links.length ? a : b);
-  const cosineSimilarity = 0;
-  
-  const avgDegreeText = svg.append('text')
-    .attr('x', 10)
-    .attr('y', 20)
-    .text('Average Degree: ' + avgDegree.toFixed(2))
-    .attr('fill', 'rgb(18, 225, 185)');
-  const maxNodeText = svg.append('text')
-    .attr('x', 10)
-    .attr('y', 40)
-    .text(`Max Degree Node: ${maxNode.links.length} (${maxNode.label})`)
-    .attr('fill', 'rgb(18, 225, 185)');
-  const cosineText = svg.append('text')
-    .attr('x', 10)
-    .attr('y', 60)
-    .text(`Cosine Similarity: ${cosineSimilarity}`)
-    .attr('fill', 'rgb(18, 225, 185)');
-  const timerText = svg.append('text')
-    .attr('x', 10)
-    .attr('y', 80)
-    .text('Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0')
-    .attr('fill', 'rgb(18, 225, 185)');
+  let editOperations = 0;
+  if(networkData.length > 1) {
+    editOperations = graphEditDistance(networkData[0], networkData[1]);
+  }
 
-  return [timerText, maxNodeText, avgDegreeText, cosineText];
+  createText(svg, 10, 20, 'Nodes: ' + nodes.length + '; Links: ' + links.length);
+  createText(svg, 10, 40, 'Average Degree: ' + avgDegree.toFixed(2));
+  createText(svg, 10, 60, `Max Degree Node: ${maxNode.links.length} (${maxNode.label})`);
+  createText(svg, 10, 80, `Graph Edit Distance: ${editOperations}`);
+  const timerText = createText(svg, 10, 100, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
+
+  return [timerText];
 };
 
 function visualiseNetwork(networkData) {
@@ -38,7 +55,11 @@ function visualiseNetwork(networkData) {
     let startNode = null, endNode = null;
     const [nodes, links, width, height] = initialiseConstants(graph, numGraphs);
     const [simulation, svg, container, link, node, texts, arrows] = setup(nodes, links, width, height, numGraphs, idx);
-    const [timerText, maxNodeText, avgDegreeText] = setupMetrics(svg, nodes);
+    const [timerText] = setupMetrics(svg, nodes, links);
+    
+    if(idx == numGraphs-1) {
+      setupDocTexts(svg);
+    };
 
     node
       .on('click', function(event, d) {
@@ -133,6 +154,5 @@ function visualiseNetwork(networkData) {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-  const networkData = JSON.parse(document.getElementById('network-data').textContent);
   visualiseNetwork(networkData);
 });

@@ -2,28 +2,20 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
-const Network = require('../models/NetworkModel');
-const Node = require('../models/NodeModel');
-const Link = require('../models/LinkModel');
-
 const authValidator = require('../middleware/authValidator');
 const convertData = require('../networkHelpers/dataConverter');
 const createNetwork = require('../networkHelpers/processFiles');
 const renderNetwork = require('../networkHelpers/renderGraph');
 
 const storage = multer.memoryStorage();
-
 const upload = multer({ storage });
-
 let uploadCount = 0;
 
 // GET - NETWORK VISUALISATION
 router.get('/network', authValidator, async (req, res) => {
   try {
     const user = req.user;
-
     const fetchLimit = uploadCount > 1 ? 2 : 1;
-    
     const networksData = await renderNetwork(user, fetchLimit);
 
     res.render('network', { networksData: networksData });
@@ -50,7 +42,6 @@ router.post(
       await files.forEach(async file => {
         uploadCount++;
         // Convert file data to JSON
-        console.log(file.originalname);
         const fileExt = file.originalname.split('.').pop().toLowerCase();
         const fileContent = await convertData(file.buffer.toString(), fileExt);
 
