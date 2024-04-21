@@ -22,6 +22,7 @@ function createSvg(numGraphs, idx) {
 
   const svg = networkContainer
     .append('svg')
+    .attr('class', 'export-svg')
     .attr('id', `svg-${idx}`)
     .attr("width", width)
     .attr("height", height);
@@ -115,7 +116,7 @@ function createZoom(link, node, texts, arrows, container) {
   function zoomed(event) {
     const transform = event.transform;
     node.style('stroke-width', 2 / transform.k);
-    link.style('stroke-width', 2 / transform.k);
+    link.style('stroke-width', 1 / transform.k);
     texts.style('font-size', 18 / transform.k);
     arrows.style('stroke-width', 2 / transform.k);
     container.attr('transform', transform);
