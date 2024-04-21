@@ -211,7 +211,7 @@ function resetGraph(node, link) {
   node.style('fill', 'rgb(18, 225, 185)');
   node.attr('r', 5);
   link.style('stroke', 'white');
-  link.style('stroke-width', '2px');
+  link.style('stroke-width', '1px');
 }
 
 export { resetGraph, breadthFirstTraversal, depthFirstTraversal, aStarTraversal };

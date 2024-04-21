@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedNodeLinkColour = document.getElementById('selected-node-links');
   const selectedDefaultButton = document.getElementById('selected-reset-button');
   
-  var selected;
-  var previousColour;
-  var selectedType;
+  let selected;
+  let previousColour;
+  let selectedType;
 
   styleButton.addEventListener('click', () => {
     toggleDropdown();
