@@ -73,15 +73,11 @@ a {
   background-color: var(--accent-color);
   color: var(--text-color);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .signup-btn:hover {
   background-color: darken(var(--accent-color), 10%);
-}
-
-.signup-btn {
-  text-decoration: none;
-  color: var(--accent-color);
 }
 
 .swirl-img {

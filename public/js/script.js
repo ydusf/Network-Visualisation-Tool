@@ -11,12 +11,13 @@ window.addEventListener('load', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const styleButton = document.getElementById('style-button');
   const applyButton = document.getElementById('apply-button');
-  const resetDefaultButton = document.getElementById('reset-button');
+  const allDefaultButton = document.getElementById('all-reset-button');
   const editMenu = document.getElementById('edit-menu');
   const selectedColour = document.getElementById('selected-colour');
   const selectedNodeSizeSlider = document.getElementById('selected-node-size-slider');
   const selectedNodeSizeNumeric = document.getElementById('selected-node-size-numeric');
   const selectedNodeLinkColour = document.getElementById('selected-node-links');
+  const selectedDefaultButton = document.getElementById('selected-reset-button');
   
   var selected;
   var previousColour;
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyStyles();
   });
 
-  resetDefaultButton.addEventListener('click', () => {
+  allDefaultButton.addEventListener('click', () => {
     document.getElementById("all-node-colour").value = "#12ffb9";
     document.getElementById("all-link-colour").value = "#ffffff";
     applyStyles();
@@ -39,11 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('contextmenu', event => {
     if (selected == event.target) {
       event.preventDefault();
-      editMenu.style.display = 'block';
-      editMenu.style.left = event.x + 'px';
-      editMenu.style.top = event.y + 'px';
-      selectedNodeSizeSlider.value = 5;
-      selectedNodeSizeNumeric.value = 5;
+      setDisabled(selected, selectedNodeSizeSlider, selectedNodeSizeNumeric, selectedNodeLinkColour);
+      setEditMenu('block', event.x, event.y);
+      selectedNodeSizeSlider.value = selected.getAttribute("r");
+      selectedNodeSizeNumeric.value = selected.getAttribute("r");
     }
   });
 
@@ -51,9 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let insideMenu = event.target.closest("#edit-menu");
 
     if (insideMenu === null) {
-      editMenu.style.display = '';
-      editMenu.style.left = 0;
-      editMenu.style.top = 0;
+      setEditMenu();
     }
 
     let targetType = isNodeOrLink(event.target);
@@ -78,49 +76,87 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   selectedColour.addEventListener('input', () => {
-    if (isNodeOrLink(selected) === "n") {
-      selected.style.fill = selectedColour.value;
-    } else {
-      selected.style.stroke = selectedColour.value;
-      previousColour = selectedColour.value;
-    }
-  })
+    let newColour = selectedColour.value;
 
-  selectedColour.addEventListener('click', () => {
     if (isNodeOrLink(selected) === "n") {
-      selected.style.fill = selectedColour.value;
+      selected.style.fill = newColour;
     } else {
-      selected.style.stroke = selectedColour.value;
-      previousColour = selectedColour.value;
+      selected.style.stroke = newColour;
+      previousColour = newColour;
     }
   })
 
   selectedNodeSizeSlider.addEventListener('input', () => {
+    let newSize = selectedNodeSizeSlider.value;
+    
     if (isNodeOrLink(selected) === "n") {
-      selected.setAttribute("r", selectedNodeSizeSlider.value);
-      d3.select(selected).style("stroke-width", selectedNodeSizeSlider.value * (1/10));
-      selectedNodeSizeNumeric.value = selectedNodeSizeSlider.value;
+      selected.setAttribute("r", newSize);
+      d3.select(selected).style("stroke-width", newSize * (1/10));
+      selectedNodeSizeNumeric.value = newSize;
     }
   })
 
   selectedNodeSizeNumeric.addEventListener('input', () => {
-    if (isNodeOrLink(selected) === "n") {
-      selected.setAttribute("r", selectedNodeSizeNumeric.value);
-      d3.select(selected).style("stroke-width", selectedNodeSizeNumeric.value * (1/10));
-      selectedNodeSizeSlider.value = selectedNodeSizeNumeric.value;
+    let newSize = parseFloat(selectedNodeSizeNumeric.value);
+    
+    if (isNodeOrLink(selected) === "n" & !isNaN(newSize) & newSize <= selectedNodeSizeNumeric.max) {
+      selected.setAttribute("r", newSize);
+      d3.select(selected).style("stroke-width", newSize * (1/10));
+      selectedNodeSizeSlider.value = newSize;
     }
   })
 
   selectedNodeLinkColour.addEventListener('input', () => {
     if (isNodeOrLink(selected) === "n") {
       let node = d3.select(selected);
-      let links = d3.selectAll("line.link").filter(function(d) {
+      let links = d3.selectAll(".link").filter(function(d) {
         return d.source === node.datum() || d.target === node.datum();
       });
 
       links.style("stroke", selectedNodeLinkColour.value);
     }
   })
+
+  selectedDefaultButton.addEventListener('click', () => {
+    if (isNodeOrLink(selected) === "n") {
+      selectedColour.value = "#12ffb9";
+      selectedNodeSizeNumeric.value = 5;
+      selectedNodeLinkColour.value = "#FFFFFF";
+
+    } else {
+      selectedColour.value = "#FFFFFF";
+    }
+
+    selectedColour.dispatchEvent(new Event("input"));
+    selectedNodeSizeNumeric.dispatchEvent(new Event("input"));
+    selectedNodeLinkColour.dispatchEvent(new Event("input"));
+  })
+
+  function setDisabled() {
+    if (isNodeOrLink(selected) === "l") {
+      selectedNodeSizeSlider.setAttribute("disabled", true);
+      selectedNodeSizeNumeric.setAttribute("disabled", true);
+      selectedNodeLinkColour.setAttribute("disabled", true);
+  
+      selectedNodeSizeSlider.labels[0].style.opacity = "0.5";
+      selectedNodeLinkColour.labels[0].style.opacity = "0.5";
+      selectedNodeLinkColour.style.opacity = "0.5";
+    } else {
+      selectedNodeSizeSlider.removeAttribute("disabled");
+      selectedNodeSizeNumeric.removeAttribute("disabled");
+      selectedNodeLinkColour.removeAttribute("disabled");
+
+      selectedNodeSizeSlider.labels[0].style.opacity = "1";
+      selectedNodeLinkColour.labels[0].style.opacity = "1";
+      selectedNodeLinkColour.style.opacity = "1";
+    }
+  }
+
+  function setEditMenu(display = '', x = 0, y = 0) {
+    editMenu.style.display = display;
+    editMenu.style.left = x + 'px';
+    editMenu.style.top = y + 'px';
+  }
 })
 
 function toggleDropdown() {
