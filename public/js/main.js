@@ -57,7 +57,7 @@ function visualiseNetwork(networkData) {
     const [simulation, svg, container, link, node, texts, arrows] = setup(nodes, links, width, height, numGraphs, idx);
     const [timerText] = setupMetrics(svg, nodes, links);
     
-    if(idx == numGraphs-1) {
+    if(idx == 0) {
       setupDocTexts(svg);
     };
 
