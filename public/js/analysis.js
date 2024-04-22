@@ -78,4 +78,52 @@ function calculateCostMatrix(graph1, graph2) {
   return costMatrix;
 }
 
-export { graphEditDistance };
+function graphToVector(graph) {
+  let nodes = graph.nodes;
+  let links = graph.links;
+  let vec = [];
+  let degree = 0;
+
+  for(const nd of nodes) {
+    for(const lk of links) {
+      if(lk.source === nd.data || lk.target === nd.data) {
+        degree++;
+      }
+    };
+    vec.push(degree);
+    degree = 0;
+  }
+  return vec;
+};
+
+function cosineSimilarity(graph1, graph2) {
+  const vector1 = graphToVector(graph1);
+  const vector2 = graphToVector(graph2);
+  const maxLength = Math.max(vector1.length, vector2.length);
+
+  while(vector1.length < maxLength) {
+    vector1.push(0);
+  }
+
+  while(vector2.length < maxLength) {
+    vector2.push(0);
+  }
+  
+  let dotProduct = 0;
+  for(let i = 0; i < vector1.length; i++) {
+    dotProduct += vector1[i] * vector2[i];
+  }
+
+  let mag1 = 0;
+  let mag2 = 0;
+  for(let i = 0; i < vector1.length; i++) {
+    mag1 += Math.pow(vector1[i], 2);
+    mag2 += Math.pow(vector2[i], 2);
+  }
+  mag1 = Math.sqrt(mag1);
+  mag2 = Math.sqrt(mag2);
+
+  return dotProduct / (mag1 * mag2);
+};
+
+export { graphEditDistance, cosineSimilarity };

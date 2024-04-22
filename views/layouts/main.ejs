@@ -7,8 +7,6 @@
     <title></title>
     <meta name="description" content="" />
     <link rel="stylesheet" type="text/css" href="/css/styles.css" />
-
-    <script type="text/javascript" defer src="/js/script.js"></script>
     <script
       src="https://kit.fontawesome.com/434156b020.js"
       crossorigin="anonymous"
@@ -23,9 +21,17 @@
   <body>
     <div class="container">
       <main class="main"><%- body %></main>
-      <%- include('../partials/footer') %>
     </div>
 
     <div class="loader"></div>
   </body>
 </html>
+
+<script>
+  window.addEventListener('load', () => {
+    const loader = document.querySelector('.loader');
+
+    loader.classList.add('loader-hidden');
+
+  });
+</script>

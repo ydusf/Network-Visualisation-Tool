@@ -1,6 +1,6 @@
 import { resetGraph, breadthFirstTraversal, depthFirstTraversal, aStarTraversal } from "./search.js";
 import { initialiseConstants, setup, handleResize } from "./setup.js";
-import { graphEditDistance } from "./analysis.js";
+import { graphEditDistance, cosineSimilarity } from "./analysis.js";
 
 const networkData = JSON.parse(document.getElementById('network-data').textContent);
 
@@ -17,32 +17,37 @@ function setupDocTexts(svg) {
   const rect = networkContainer.node().getBoundingClientRect();
   const height = rect.height;
 
-  createText(svg, 10, height-10, 'c: cluster nodes');
-  createText(svg, 10, height-30, 'a: A* traversal');
-  createText(svg, 10, height-50, 'd: DFS traversal');
-  createText(svg, 10, height-70, 'b: BFS traversal');
-  createText(svg, 10, height-90, 'g: degree-based styling');
-  createText(svg, 10, height-110, 'n: reset styles');
-  createText(svg, 10, height-130, 'm: highlight highest degree');
-  createText(svg, 10, height-150, 'h: cluster nodes by degree');
-  createText(svg, 10, height-170, 'c: colour presets');
-  createText(svg, 10, height-190, 'l: enable arrows');
-  createText(svg, 10, height-210, 't: enable labels');
+  createText(svg, 10, height-10, 'select & right click node/link to style');
+  createText(svg, 10, height-30, 'j: cluster nodes');
+  createText(svg, 10, height-50, 'a: A* traversal');
+  createText(svg, 10, height-70, 'd: DFS traversal');
+  createText(svg, 10, height-90, 'b: BFS traversal');
+  createText(svg, 10, height-110, 'g: degree-based styling');
+  createText(svg, 10, height-130, 'n: reset styles');
+  createText(svg, 10, height-150, 'm: highlight highest degree');
+  createText(svg, 10, height-170, 'h: cluster nodes by degree');
+  createText(svg, 10, height-190, 'c: colour presets');
+  createText(svg, 10, height-210, 'l: enable arrows');
+  createText(svg, 10, height-230, 't: enable labels');
 }
 
 function setupMetrics(svg, nodes, links) {
   const avgDegree = d3.mean(nodes, d => d.links.length);
   const maxNode = nodes.reduce((a, b) => a.links.length > b.links.length ? a : b);
   let editOperations = 0;
+  let cosineValue = 0;
   if(networkData.length > 1) {
     editOperations = graphEditDistance(networkData[0], networkData[1]);
+    cosineValue = cosineSimilarity(networkData[0], networkData[1]);
+    console.log(cosineValue);
   }
 
   createText(svg, 10, 20, 'Nodes: ' + nodes.length + '; Links: ' + links.length);
   createText(svg, 10, 40, 'Average Degree: ' + avgDegree.toFixed(2));
   createText(svg, 10, 60, `Max Degree Node: ${maxNode.links.length} (${maxNode.label})`);
   createText(svg, 10, 80, `Graph Edit Distance: ${editOperations}`);
-  const timerText = createText(svg, 10, 100, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
+  createText(svg, 10, 100, `Cosine Similarity: ${cosineValue.toFixed(2)}`);
+  const timerText = createText(svg, 10, 120, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
 
   return timerText;
 };
