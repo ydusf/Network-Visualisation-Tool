@@ -64,11 +64,11 @@ function generate(node_size, link_size) {
   */
 }
 
-const graph = generate(400, 1000);
+const graph = generate(2000, 3500);
 
 const fs = require("fs");
 
-fs.writeFile('../data/generated_graph.json', JSON.stringify(graph), err => {
+fs.writeFile('../data/xl_graph.json', JSON.stringify(graph), err => {
   if (err) {
     console.error(err);
   } else {

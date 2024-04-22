@@ -5,7 +5,7 @@ import { graphEditDistance } from "./analysis.js";
 const networkData = JSON.parse(document.getElementById('network-data').textContent);
 
 function createText(svg, x, y, str) {
-  svg.append('text')
+  return svg.append('text')
     .attr('x', x)
     .attr('y', y)
     .text(str)
@@ -44,7 +44,7 @@ function setupMetrics(svg, nodes, links) {
   createText(svg, 10, 80, `Graph Edit Distance: ${editOperations}`);
   const timerText = createText(svg, 10, 100, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
 
-  return [timerText];
+  return timerText;
 };
 
 function visualiseNetwork(networkData) {
@@ -55,11 +55,33 @@ function visualiseNetwork(networkData) {
     let startNode = null, endNode = null;
     const [nodes, links, width, height] = initialiseConstants(graph, numGraphs);
     const [simulation, svg, container, link, node, texts, arrows] = setup(nodes, links, width, height, numGraphs, idx);
-    const [timerText] = setupMetrics(svg, nodes, links);
+    const timerText = setupMetrics(svg, nodes, links);
     
     if(idx == 0) {
       setupDocTexts(svg);
     };
+
+    const slider = document.getElementById("selected-force-strength-slider");
+    const numericInput = document.getElementById("selected-force-strength-numeric");
+
+    function updateChargeStrength(value) {
+      simulation.force('charge', d3.forceManyBody().strength(-value));
+      simulation.alpha(1).restart();
+    };
+
+    slider.addEventListener("input", function() {
+      const value = parseInt(this.value);
+      numericInput.value = value;
+      updateChargeStrength(value);
+    });
+
+    numericInput.addEventListener("input", function() {
+      const value = parseInt(this.value);
+      if (value >= parseInt(this.min) && value <= parseInt(this.max)) {
+        slider.value = value;
+        updateChargeStrength(value);
+      }
+    });
 
     node
       .on('click', function(event, d) {

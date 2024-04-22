@@ -2,9 +2,7 @@ import netClustering from "netclustering";
 
 function createSimulation(nodes, links, width, height) {
   const numberOfNodes = nodes.length;
-  const additive = numberOfNodes / 100;
-
-  const maxForceStrength = (8500 / numberOfNodes) - (2 * additive);
+  const maxForceStrength = (8500 / numberOfNodes);
   const forceStrength = -maxForceStrength;
 
   return d3
