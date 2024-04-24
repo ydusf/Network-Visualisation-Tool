@@ -32,24 +32,27 @@ function setupDocTexts(svg) {
 }
 
 function setupMetrics(svg, nodes, links) {
-  const avgDegree = d3.mean(nodes, d => d.links.length);
-  const maxNode = nodes.reduce((a, b) => a.links.length > b.links.length ? a : b);
-  let editOperations = 0;
-  let cosineValue = 0;
-  if(networkData.length > 1) {
-    editOperations = graphEditDistance(networkData[0], networkData[1]);
-    cosineValue = cosineSimilarity(networkData[0], networkData[1]);
-    console.log(cosineValue);
+  try {
+    const avgDegree = d3.mean(nodes, d => d.links.length);
+    const maxNode = nodes.reduce((a, b) => a.links.length > b.links.length ? a : b);
+    let editOperations = 0;
+    let cosineValue = 0;
+    if(networkData.length > 1) {
+      editOperations = graphEditDistance(networkData[0], networkData[1]);
+      cosineValue = cosineSimilarity(networkData[0], networkData[1]);
+    }
+
+    createText(svg, 10, 20, 'Nodes: ' + nodes.length + '; Links: ' + links.length);
+    createText(svg, 10, 40, 'Average Degree: ' + avgDegree.toFixed(2));
+    createText(svg, 10, 60, `Max Degree Node: ${maxNode.links.length} (${maxNode.label})`);
+    createText(svg, 10, 80, `Graph Edit Distance: ${editOperations}`);
+    createText(svg, 10, 100, `Cosine Similarity: ${cosineValue.toFixed(2)}`);
+    const timerText = createText(svg, 10, 120, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
+
+    return timerText;
+  } catch(error) {
+    console.error(error);
   }
-
-  createText(svg, 10, 20, 'Nodes: ' + nodes.length + '; Links: ' + links.length);
-  createText(svg, 10, 40, 'Average Degree: ' + avgDegree.toFixed(2));
-  createText(svg, 10, 60, `Max Degree Node: ${maxNode.links.length} (${maxNode.label})`);
-  createText(svg, 10, 80, `Graph Edit Distance: ${editOperations}`);
-  createText(svg, 10, 100, `Cosine Similarity: ${cosineValue.toFixed(2)}`);
-  const timerText = createText(svg, 10, 120, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
-
-  return timerText;
 };
 
 function visualiseNetwork(networkData) {
@@ -61,7 +64,7 @@ function visualiseNetwork(networkData) {
     const [nodes, links, width, height] = initialiseConstants(graph, numGraphs);
     const [simulation, svg, container, link, node, texts, arrows] = setup(nodes, links, width, height, numGraphs, idx);
     const timerText = setupMetrics(svg, nodes, links);
-    
+
     if(idx == 0) {
       setupDocTexts(svg);
     };

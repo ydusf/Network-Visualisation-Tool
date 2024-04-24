@@ -15,7 +15,7 @@ let uploadCount = 0;
 router.get('/network', authValidator, async (req, res) => {
   try {
     const user = req.user;
-    const fetchLimit = uploadCount > 1 ? 2 : 2;
+    const fetchLimit = uploadCount > 1 ? 2 : 1;
     const networksData = await renderNetwork(user, fetchLimit);
 
     res.render('network', { networksData: networksData });
@@ -39,7 +39,7 @@ router.post(
         return res.status(400).json({ error: 'No file uploaded.' });
       }
 
-      await files.forEach(async file => {
+      await Promise.all(files.map( async file => {
         uploadCount++;
         // Convert file data to JSON
         const fileExt = file.originalname.split('.').pop().toLowerCase();
@@ -55,7 +55,7 @@ router.post(
         const links = fileContent.links;
 
         await createNetwork(nodes, links, req.user._id);
-      });
+      }));
 
       res.redirect('network')
     } catch (error) {

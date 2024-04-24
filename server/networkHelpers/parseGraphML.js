@@ -10,7 +10,7 @@ function parseGraphML(data) {
 
       const nodes = result.graphml.graph[0].node.map(node => {
         return {
-          id: node.$.id,
+          value: node.$.id,
         };
       });
 

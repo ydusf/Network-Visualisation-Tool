@@ -4,8 +4,8 @@ const Network = require('../models/NetworkModel');
 
 async function createNetwork(nodes, links, userId) {
   const network = new Network({
-    title: 'Test Network',
-    description: 'Testing',
+    title: 'New Network',
+    description: '',
     user_id: userId
   });
   await network.save();
@@ -28,7 +28,13 @@ async function createNetwork(nodes, links, userId) {
   );
 
   network.nodes = nodeObjects.map(obj => obj._id);
+  console.log("Started printing graphml nodes here");
+  console.log(nodes);
+  console.log("Stopped printing graphml nodes here");
   network.links = linkObjects.map(obj => obj._id);
+  console.log("Started printing graphml links here");
+  console.log(links);
+  console.log("Stopped printing graphml links here");
   await network.save();
 
   return network; 
