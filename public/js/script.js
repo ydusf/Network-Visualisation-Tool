@@ -1,13 +1,3 @@
-window.addEventListener('load', () => {
-  const loader = document.querySelector('.loader');
-
-  loader.classList.add('loader-hidden');
-
-  // loader.addEventListener('transitionend', () => {
-  //   document.body.removeChild('loader');
-  // });
-});
-
 document.addEventListener('DOMContentLoaded', () => {
   const styleButton = document.getElementById('style-button');
   const applyButton = document.getElementById('apply-button');

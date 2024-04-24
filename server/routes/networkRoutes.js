@@ -39,7 +39,7 @@ router.post(
         return res.status(400).json({ error: 'No file uploaded.' });
       }
 
-      await files.forEach(async file => {
+      await Promise.all(files.map( async file => {
         uploadCount++;
         // Convert file data to JSON
         const fileExt = file.originalname.split('.').pop().toLowerCase();
@@ -55,7 +55,7 @@ router.post(
         const links = fileContent.links;
 
         await createNetwork(nodes, links, req.user._id);
-      });
+      }));
 
       res.redirect('network')
     } catch (error) {
