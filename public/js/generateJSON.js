@@ -37,32 +37,7 @@ function generate(node_size, link_size) {
 
   return graph;
 
-
-  /* output example:
-
-  {
-    "nodes": [
-      { 
-        "name": A,
-        "value": 0, 
-      },
-      { 
-        "name": B,
-        "value": 1, 
-      },
-      etc...
-    ],
-    "links": [
-      { 
-        "source": 0,
-        "target": 1,
-        "value": 0,
-      },
-      etc...
-    ]
-  }
-  */
-}
+};
 
 const fs = require("fs");
 

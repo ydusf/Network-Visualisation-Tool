@@ -64,15 +64,14 @@ function createLinksAndNodes(container, links, nodes) {
     .append('g')
     .selectAll('text')
     .data(nodes)
-    .enter().append('text')
+    .join('text')
     .attr('class', 'texts')
     .style("pointer-events", "none");
-    // .text(d => d.label);
 
   return { link, node, texts, arrows };
 };
-function ticked(link, node, texts) {
-  texts
+function ticked(link, node) {
+  d3.selectAll('.texts')
     .attr('x', d => d.x)
     .attr('y', d => d.y-7);
 
@@ -114,6 +113,7 @@ function createZoom(link, node, texts, arrows, container) {
   function zoomed(event) {
     const transform = event.transform;
     node.style('stroke-width', 2 / transform.k);
+    node.style('r', 5 / transform.k);
     link.style('stroke-width', 1 / transform.k);
     texts.style('font-size', 18 / transform.k);
     arrows.style('stroke-width', 2 / transform.k);
