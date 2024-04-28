@@ -2,7 +2,13 @@ import { resetGraph, breadthFirstTraversal, depthFirstTraversal, aStarTraversal 
 import { initialiseConstants, setup, handleResize } from "./setup.js";
 import { graphEditDistance, cosineSimilarity } from "./analysis.js";
 
-const networkData = JSON.parse(document.getElementById('network-data').textContent);
+let networkData;
+
+try {
+  networkData = JSON.parse(document.getElementById('network-data').textContent);
+} catch(error) {
+  console.error(error);
+}
 
 function createText(svg, x, y, str) {
   return svg.append('text')
@@ -173,10 +179,41 @@ function visualiseNetwork(networkData) {
         link.style('stroke', linkColour);
 
       } else if(event.key === 'l') {
-        d3.selectAll('.arrow').attr('visibility', arrowsHidden ? 'visible' : 'hidden');
+        if(arrowsHidden) {
+          container
+            .append("defs")
+            .selectAll("marker")
+            .data(["arrow"])
+            .join("marker")
+            .attr("id", d => d)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 15)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .attr('class', 'arrow')
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5");
+        } else {
+          d3.selectAll('defs').remove();
+        }
         arrowsHidden = !arrowsHidden;
       } else if(event.key === 't') {
-        d3.selectAll('.texts').attr('visibility', textsHidden ? 'visible' : 'hidden');
+        if(textsHidden) {
+          container
+            .append('g')
+            .selectAll('text')
+            .data(nodes)
+            .enter() // Enter selection for new data
+            .append('text')
+            .attr('class', 'texts')
+            .style("pointer-events", "none")
+            .attr('x', d => d.x) // Set the x position based on node data
+            .attr('y', d => d.y) // Set the y position based on node data
+            .text(d => d.links.length);
+        } else {
+          d3.selectAll('.texts').remove();
+        }
         textsHidden = !textsHidden;
       }
     });

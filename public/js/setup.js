@@ -4,12 +4,10 @@ function createSimulation(nodes, links, width, height) {
   const numberOfNodes = nodes.length;
   const maxForceStrength = (8500 / numberOfNodes);
   const forceStrength = -maxForceStrength;
-  console.log(nodes);
-  console.log(links);
 
   return d3
     .forceSimulation(nodes)
-    .force("link", d3.forceLink().links(links))
+    .force("link", d3.forceLink(links))
     .force('charge', d3.forceManyBody().strength(forceStrength))
     .force('center', d3.forceCenter(width / 2, height / 2));
 };
@@ -66,15 +64,14 @@ function createLinksAndNodes(container, links, nodes) {
     .append('g')
     .selectAll('text')
     .data(nodes)
-    .enter().append('text')
+    .join('text')
     .attr('class', 'texts')
     .style("pointer-events", "none");
-    // .text(d => d.label);
 
   return { link, node, texts, arrows };
 };
-function ticked(link, node, texts) {
-  texts
+function ticked(link, node) {
+  d3.selectAll('.texts')
     .attr('x', d => d.x)
     .attr('y', d => d.y-7);
 
@@ -116,6 +113,7 @@ function createZoom(link, node, texts, arrows, container) {
   function zoomed(event) {
     const transform = event.transform;
     node.style('stroke-width', 2 / transform.k);
+    node.style('r', 5 / transform.k);
     link.style('stroke-width', 1 / transform.k);
     texts.style('font-size', 18 / transform.k);
     arrows.style('stroke-width', 2 / transform.k);

@@ -8,18 +8,34 @@ function parseGraphML(data) {
         return;
       }
 
-      const nodes = result.graphml.graph[0].node.map(node => {
-        return {
-          value: node.$.id,
-        };
-      });
+      if (!result.graphml || !result.graphml.graph || !result.graphml.graph[0]) {
+        reject(new Error('Invalid GraphML format: Missing graph element.'));
+        return;
+      }
 
-      const edges = result.graphml.graph[0].edge.map(edge => {
-        return {
-          source: edge.$.source,
-          target: edge.$.target,
-        };
-      });
+      const graph = result.graphml.graph[0];
+
+      const idMap = new Map();
+      let idCounter = 0;
+
+      const nodes = graph.node ? graph.node.map(node => {
+        const id = node.$.id;
+        let value;
+
+        if (idMap.has(id)) {
+          value = idMap.get(id);
+        } else {
+          value = idCounter++;
+          idMap.set(id, value);
+        }
+
+        return { value };
+      }) : [];
+
+      const edges = graph.edge ? graph.edge.map(edge => ({
+        source: idMap.get(edge.$.source),
+        target: idMap.get(edge.$.target)
+      })) : [];
 
       const graphJSON = {
         nodes: nodes,
