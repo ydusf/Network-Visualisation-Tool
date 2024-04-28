@@ -72,7 +72,7 @@ a {
 .signup-btn {
   font-size: 12px;
   background-color: var(--accent-color);
-  color: var(--text-color);
+  color: black;
   cursor: pointer;
   text-decoration: none;
 }
