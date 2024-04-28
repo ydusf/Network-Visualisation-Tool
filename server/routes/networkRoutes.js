@@ -17,6 +17,10 @@ router.get('/network', authValidator, async (req, res) => {
     const user = req.user;
     const fetchLimit = uploadCount > 1 ? 2 : 1;
     const networksData = await renderNetwork(user, fetchLimit);
+    uploadCount = 0;
+
+    console.log(networksData[0].nodes);
+    console.log(networksData[0].links);
 
     res.render('network', { networksData: networksData });
   } catch (error) {

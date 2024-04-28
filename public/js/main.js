@@ -2,7 +2,13 @@ import { resetGraph, breadthFirstTraversal, depthFirstTraversal, aStarTraversal 
 import { initialiseConstants, setup, handleResize } from "./setup.js";
 import { graphEditDistance, cosineSimilarity } from "./analysis.js";
 
-const networkData = JSON.parse(document.getElementById('network-data').textContent);
+let networkData;
+
+try {
+  networkData = JSON.parse(document.getElementById('network-data').textContent);
+} catch(error) {
+  console.error(error);
+}
 
 function createText(svg, x, y, str) {
   return svg.append('text')

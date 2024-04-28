@@ -64,16 +64,33 @@ function generate(node_size, link_size) {
   */
 }
 
-const graph = generate(2000, 3500);
-
 const fs = require("fs");
 
-fs.writeFile('../data/xl_graph.json', JSON.stringify(graph), err => {
-  if (err) {
-    console.error(err);
-  } else {
-    // file written successfully
-  }
-});
 
-console.log(graph);
+for(let i = 1; i <= 15; i++) {
+  const node_count = 190;
+  const link_count = Math.pow(i, 2) * 10;
+  const graph = generate(node_count, link_count);
+  fs.writeFile(`../data/links_${i}.json`, JSON.stringify(graph), err => {
+    if (err) {
+      console.error(err);
+    } else {
+      // file written successfully
+      console.log(graph);
+    }
+  });
+}
+
+for(let i = 1; i <= 15; i++) {
+  const node_count = 10 * Math.pow(i, 2)
+  const link_count = 400;
+  const graph = generate(node_count, link_count);
+  fs.writeFile(`../data/nodes_${i}.json`, JSON.stringify(graph), err => {
+    if (err) {
+      console.error(err);
+    } else {
+      // file written successfully
+      console.log(graph);
+    }
+  });
+}

@@ -4,12 +4,10 @@ function createSimulation(nodes, links, width, height) {
   const numberOfNodes = nodes.length;
   const maxForceStrength = (8500 / numberOfNodes);
   const forceStrength = -maxForceStrength;
-  console.log(nodes);
-  console.log(links);
 
   return d3
     .forceSimulation(nodes)
-    .force("link", d3.forceLink().links(links))
+    .force("link", d3.forceLink(links))
     .force('charge', d3.forceManyBody().strength(forceStrength))
     .force('center', d3.forceCenter(width / 2, height / 2));
 };
