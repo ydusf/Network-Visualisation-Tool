@@ -28,20 +28,6 @@ function createSvg(numGraphs, idx) {
   return svg;
 };
 function createLinksAndNodes(container, links, nodes) {
-  const arrows = container
-    .append("defs")
-    .selectAll("marker")
-    .data(["arrow"])
-    .join("marker")
-    .attr("id", d => d)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 15)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-    .attr('class', 'arrow')
-    .append("path")
-    .attr("d", "M0,-5L10,0L0,5");
 
   const link = container
     .append('g')
@@ -60,15 +46,7 @@ function createLinksAndNodes(container, links, nodes) {
     .attr('class', 'node')
     .attr('fill', 'rgb(18, 225, 185)');
 
-  const texts = container
-    .append('g')
-    .selectAll('text')
-    .data(nodes)
-    .join('text')
-    .attr('class', 'texts')
-    .style("pointer-events", "none");
-
-  return { link, node, texts, arrows };
+  return { link, node };
 };
 function ticked(link, node) {
   d3.selectAll('.texts')
@@ -109,16 +87,16 @@ function drag(simulation) {
     .on('drag', dragged)
     .on('end', dragend);
 };
-function createZoom(link, node, texts, arrows, container) {
+function createZoom(link, node, container) {
   function zoomed(event) {
     const transform = event.transform;
     node.style('stroke-width', 2 / transform.k);
     node.style('r', 5 / transform.k);
     link.style('stroke-width', 1 / transform.k);
-    texts.style('font-size', 18 / transform.k);
-    arrows.style('stroke-width', 2 / transform.k);
+    d3.selectAll('.texts').style('font-size', 18 / transform.k);
+    d3.selectAll('.arrows').style('stroke-width', 2 / transform.k);
     container.attr('transform', transform);
-    ticked(link, node, texts);
+    ticked(link, node);
   }
 
   return d3
@@ -201,12 +179,12 @@ function setup(nodes, links, width, height, numGraphs, idx) {
   const svg = createSvg(numGraphs, idx);
   const container = svg.append('g');
   addAttributes(nodes, links);
-  const { link, node, texts, arrows } = createLinksAndNodes(container, links, nodes);
-  svg.call(createZoom(link, node, texts, arrows, container));
-  simulation.on('tick', () => ticked(link, node, texts));
+  const { link, node } = createLinksAndNodes(container, links, nodes);
+  svg.call(createZoom(link, node, container));
+  simulation.on('tick', () => ticked(link, node));
   node.call(drag(simulation));
 
-  return [simulation, svg, container, link, node, texts, arrows];
+  return [simulation, svg, container, link, node];
 };
 
 export { initialiseConstants, setup, handleResize };

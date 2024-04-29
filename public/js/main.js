@@ -68,7 +68,7 @@ function visualiseNetwork(networkData) {
   networkData.forEach((graph, idx) => {
     let startNode = null, endNode = null;
     const [nodes, links, width, height] = initialiseConstants(graph, numGraphs);
-    const [simulation, svg, container, link, node, texts, arrows] = setup(nodes, links, width, height, numGraphs, idx);
+    const [simulation, svg, container, link, node] = setup(nodes, links, width, height, numGraphs, idx);
     const timerText = setupMetrics(svg, nodes, links);
 
     if(idx == 0) {
@@ -113,8 +113,8 @@ function visualiseNetwork(networkData) {
     );
     
     let degreeMatched = false;
-    let arrowsHidden = false;
-    let textsHidden = false;
+    let arrowsHidden = true;
+    let textsHidden = true;
     let maxNodeVisible = false;
 
     const colourPairs = [
@@ -131,8 +131,6 @@ function visualiseNetwork(networkData) {
       '#378BB7', '#A62419', '#D64852', '#1F0BEA', '#D6', '#736014', '#F88574', '#0BAA53', '#4AAABF', '#AFFE73',
       '#CCC449', '#82809C', '#9CB800', '#EB5CF4', '#769025', '#D728A2', '#0D56D7', '#C30472', '#67B136', '#E6B7D8'];
     const color = d3.scaleOrdinal().range(colours);
-
-    texts.text(d => d.links.length);
 
     window.addEventListener('keydown', function(event) {
       if (event.key === 'd' && startNode !== null && endNode !== null) {
@@ -151,6 +149,8 @@ function visualiseNetwork(networkData) {
         node.style('fill', d => color(d.cluster))
 
       } else if(event.key === 'n') {
+        startNode = null;
+        endNode = null;
         resetGraph(node, link);
 
       } else if(event.key === 'm') {
@@ -204,12 +204,13 @@ function visualiseNetwork(networkData) {
             .append('g')
             .selectAll('text')
             .data(nodes)
-            .enter() // Enter selection for new data
+            .enter()
             .append('text')
+            .attr('x', d => d.x)
+            .attr('y', d => d.y-7)
             .attr('class', 'texts')
+            .style('font-size', 18)
             .style("pointer-events", "none")
-            .attr('x', d => d.x) // Set the x position based on node data
-            .attr('y', d => d.y) // Set the y position based on node data
             .text(d => d.links.length);
         } else {
           d3.selectAll('.texts').remove();
