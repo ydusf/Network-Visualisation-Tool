@@ -41,8 +41,8 @@ function generateGraphML(node_size, link_size) {
 
 const fs = require("fs");
 
-const node_count = 1500
-const link_count = 7500;
+const node_count = 350;
+const link_count = 2200;
 const graphMLString = generateGraphML(node_count, link_count);
 fs.writeFile(`../data/graphml/graph_${1}.graphml`, graphMLString, err => {
   if (err) {

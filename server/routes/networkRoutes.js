@@ -19,10 +19,7 @@ router.get('/network', authValidator, async (req, res) => {
     const networksData = await renderNetwork(user, fetchLimit);
     uploadCount = 0;
 
-    console.log(networksData[0].nodes);
-    console.log(networksData[0].links);
-
-    res.render('network', { networksData: networksData });
+    res.status(200).render('network', { networksData: networksData });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -39,7 +36,7 @@ router.post(
       // Validate file upload
       const files = req.files;
 
-      if (!files) {
+      if (!files || files.length === 0) {
         return res.status(400).json({ error: 'No file uploaded.' });
       }
 
@@ -61,7 +58,7 @@ router.post(
         await createNetwork(nodes, links, req.user._id);
       }));
 
-      res.redirect('network')
+      res.status(200).redirect('network')
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error.' });

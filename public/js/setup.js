@@ -94,7 +94,9 @@ function createZoom(link, node, container) {
     node.style('r', 5 / transform.k);
     link.style('stroke-width', 1 / transform.k);
     d3.selectAll('.texts').style('font-size', 18 / transform.k);
-    d3.selectAll('.arrows').style('stroke-width', 2 / transform.k);
+    d3.selectAll('.arrows')
+    .style('stroke-width', 12 / transform.k)
+    .style('width', 12 / transform.k);
     container.attr('transform', transform);
     ticked(link, node);
   }

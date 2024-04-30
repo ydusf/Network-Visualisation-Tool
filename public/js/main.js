@@ -1,6 +1,6 @@
 import { resetGraph, breadthFirstTraversal, depthFirstTraversal, aStarTraversal } from "./search.js";
 import { initialiseConstants, setup, handleResize } from "./setup.js";
-import { graphEditDistance, cosineSimilarity } from "./analysis.js";
+import { graphEditDistance, cosineSimilarity, clusteringCoefficient } from "./analysis.js";
 
 let networkData;
 
@@ -41,6 +41,8 @@ function setupMetrics(svg, nodes, links) {
   try {
     const avgDegree = d3.mean(nodes, d => d.links.length);
     const maxNode = nodes.reduce((a, b) => a.links.length > b.links.length ? a : b);
+    const clustCoeff = clusteringCoefficient(networkData[0]);
+    console.log(clustCoeff);
     let editOperations = 0;
     let cosineValue = 0;
     if(networkData.length > 1) {
@@ -53,7 +55,8 @@ function setupMetrics(svg, nodes, links) {
     createText(svg, 10, 60, `Max Degree Node: ${maxNode.links.length} (${maxNode.label})`);
     createText(svg, 10, 80, `Graph Edit Distance: ${editOperations}`);
     createText(svg, 10, 100, `Cosine Similarity: ${cosineValue.toFixed(2)}`);
-    const timerText = createText(svg, 10, 120, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
+    createText(svg, 10, 120, `Clustering Coefficient: ${clustCoeff.toFixed(3)}`);
+    const timerText = createText(svg, 10, 140, 'Nodes Visited: 0; Shortest Path Found: 0; Average Degree: 0');
 
     return timerText;
   } catch(error) {

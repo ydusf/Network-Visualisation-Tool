@@ -17,9 +17,9 @@ router.post('/register', async (req, res) => {
       res.redirect('/login');
     } catch (error) {
       if (error.code === 11000) {
-        res.redirect('/login');
+        res.status(200).redirect('/login');
       }
-      res.redirect('/register');
+      res.status(302).redirect('/register');
     }
   } catch (error) {
     console.error(error);
@@ -43,20 +43,20 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      res.redirect('/login?error=True');
+      res.status(302).redirect('/login?error=True');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      res.redirect('/login?error=True');
+      res.status(302).redirect('/login?error=True');
     }
 
     const token = jwt.sign({ userId: user._id }, jwtSecret, {
       expiresIn: '1d',
     });
     res.cookie('token', token, { httpOnly: true });
-    res.redirect('/network');
+    res.status(200).redirect('/network');
   } catch (err) {
     console.error(err);
   }
@@ -70,13 +70,13 @@ router.get('/login', async (req, res) => {
     message = 'Incorrect Username or Password';
   }
   // Pass the message to the template
-  res.render('login', { errorMessage: message });
+  res.status(200).render('login', { errorMessage: message });
 });
 
 // GET - USER LOGOUT
 router.get('/logout', authValidator, async (req, res) => {
   res.clearCookie('token');
-  res.render('logoutPage');
+  res.status(200).render('logoutPage');
 });
 
 module.exports = router;

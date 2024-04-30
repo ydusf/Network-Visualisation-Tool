@@ -1,83 +1,46 @@
+const math = require('mathjs');
+
+function createAdjacencyMatrix(graph) {
+  const { nodes, links } = graph;
+  const numNodes = nodes.length;
+  const matrix = math.zeros(numNodes, numNodes);
+  
+  // Fill the matrix based on links
+  links.forEach(link => {
+    const sourceIndex = nodes.findIndex(node => node.data === link.source);
+    const targetIndex = nodes.findIndex(node => node.data === link.target);
+    
+    if (sourceIndex !== -1 && targetIndex !== -1) {
+      matrix.subset(math.index(sourceIndex, targetIndex), 1);
+      matrix.subset(math.index(targetIndex, sourceIndex), 1);
+    }
+  });
+  
+  return matrix;
+}
+function padMatrix(matrix, rows, cols) {
+  let paddedMatrix = math.zeros(rows, cols);
+  for (let i = 0; i < matrix.size()[0]; i++) {
+    for (let j = 0; j < matrix.size()[1]; j++) {
+      paddedMatrix.set([i, j], matrix.get([i, j]));
+    }
+  }
+  return paddedMatrix;
+}
 function graphEditDistance(graph1, graph2) {
-  const costMatrix = calculateCostMatrix(graph1, graph2);
+  let adj1 = createAdjacencyMatrix(graph1);
+  let adj2 = createAdjacencyMatrix(graph2);
 
-  const m = graph1.nodes.length;
-  const n = graph2.nodes.length;
-  const dp = [];
-  for (let i = 0; i <= m; i++) {
-    dp[i] = [];
-    for (let j = 0; j <= n; j++) {
-      dp[i][j] = 0;
-    }
+  if (adj1.size()[0] < adj2.size()[0] || adj1.size()[1] < adj2.size()[1]) {
+    adj1 = padMatrix(adj1, adj2.size()[0], adj2.size()[1]);
+  } else if (adj1.size()[0] > adj2.size()[0] || adj1.size()[1] > adj2.size()[1]) {
+    adj2 = padMatrix(adj2, adj1.size()[0], adj1.size()[1]);
   }
 
-  for (let i = 1; i <= m; i++) {
-    dp[i][0] = dp[i - 1][0] + costMatrix.nodes[i - 1].deleteCost;
-  }
-  for (let j = 1; j <= n; j++) {
-    dp[0][j] = dp[0][j - 1] + costMatrix.nodes[j - 1].insertCost;
-  }
-
-  for (let i = 1; i <= m; i++) {
-    for (let j = 1; j <= n; j++) {
-      dp[i][j] = Math.min(
-        dp[i - 1][j] + costMatrix.nodes[i - 1].deleteCost,
-        dp[i][j - 1] + costMatrix.nodes[j - 1].insertCost,
-        dp[i - 1][j - 1] + costMatrix.links[i - 1][j - 1].editCost
-      );
-    }
-  }
-
-  return dp[m][n];
-}
-
-function calculateCostMatrix(graph1, graph2) {
-  const costMatrix = {
-    nodes: [],
-    links: []
-  };
-
-  for (const node1 of graph1.nodes) {
-    let deleteCost = 1;
-    let insertCost = 1;
-    for (const node2 of graph2.nodes) {
-      if (node1 === node2) {
-        deleteCost = 0;
-        insertCost = 0;
-        break;
-      }
-    }
-    costMatrix.nodes.push({ deleteCost, insertCost });
-  }
-
-  for (const node2 of graph2.nodes) {
-    let insertCost = 1;
-    for (const node1 of graph1.nodes) {
-      if (node1 === node2) {
-        insertCost = 0;
-        break;
-      }
-    }
-    if (insertCost === 1) {
-      costMatrix.nodes.push({ deleteCost: 1, insertCost });
-    }
-  }
-
-  for (const link1 of graph1.links) {
-    const row = [];
-    for (const link2 of graph2.links) {
-      let editCost = 1;
-      if (link1.source === link2.source && link1.target === link2.target) {
-        editCost = 0;
-      }
-      row.push({ editCost });
-    }
-    costMatrix.links.push(row);
-  }
-
-  return costMatrix;
-}
-
+  let diff = math.abs(math.subtract(adj1, adj2));
+  let distance = math.sum(diff);
+  return distance;
+};
 function graphToVector(graph) {
   let nodes = graph.nodes;
   let links = graph.links;
@@ -95,7 +58,6 @@ function graphToVector(graph) {
   }
   return vec;
 };
-
 function cosineSimilarity(graph1, graph2) {
   const vector1 = graphToVector(graph1);
   const vector2 = graphToVector(graph2);
@@ -125,5 +87,39 @@ function cosineSimilarity(graph1, graph2) {
 
   return dotProduct / (mag1 * mag2);
 };
+function clusteringCoefficient(graph) {
+  const { nodes, links } = graph;
+  const numNodes = nodes.length;
 
-export { graphEditDistance, cosineSimilarity };
+  let totalClusteringCoefficient = 0;
+
+  nodes.forEach(node => {
+    const neighbors = links
+      .filter(link => link.source === node.data || link.target === node.data)
+      .map(link => (link.source === node.data ? link.target : link.source));
+
+    const numNeighbors = neighbors.length;
+    let numConnectedPairs = 0;
+
+    if (numNeighbors < 2) {
+      return;
+    }
+
+    for (let i = 0; i < numNeighbors - 1; i++) {
+      for (let j = i + 1; j < numNeighbors; j++) {
+        if (links.some(link => (link.source === neighbors[i] && link.target === neighbors[j]) || (link.source === neighbors[j] && link.target === neighbors[i]))) {
+          numConnectedPairs++;
+        }
+      }
+    }
+
+    const clusteringCoefficient = numConnectedPairs / (numNeighbors * (numNeighbors - 1) / 2);
+    totalClusteringCoefficient += clusteringCoefficient;
+  });
+
+  const overallClusteringCoefficient = totalClusteringCoefficient / numNodes;
+
+  return overallClusteringCoefficient;
+}
+
+module.exports = { graphEditDistance, cosineSimilarity, clusteringCoefficient };

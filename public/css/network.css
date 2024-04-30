@@ -23,7 +23,6 @@
 .arrow {
   fill: black;
   stroke: var(--accent-color);
-  stroke-width: 1px;
 }
 
 .network-container {
