@@ -1,3 +1,5 @@
+// JS script handling a majority of the styling features
+
 document.addEventListener('DOMContentLoaded', () => {
   const styleButton = document.getElementById('style-button');
   const applyButton = document.getElementById('apply-button');
@@ -13,20 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
   let previousColour;
   let selectedType;
 
+  // Drop down menu in navbar
   styleButton.addEventListener('click', () => {
     toggleDropdown();
   });
 
+  // Apply button in navbar styling menu
   applyButton.addEventListener('click', () => {
     applyStyles();
   });
 
+  // Reset to default button in navbar styling menu
   allDefaultButton.addEventListener('click', () => {
     document.getElementById("all-node-colour").value = "#12ffb9";
     document.getElementById("all-link-colour").value = "#ffffff";
     applyStyles();
   });
 
+  // Show individual styling context menu upon right clicking a selected element
   document.addEventListener('contextmenu', event => {
     if (selected == event.target) {
       event.preventDefault();
@@ -37,13 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Code for either closing the styling context menu when clicked off, or for selecting a valid graph element
   document.addEventListener('click', event => {
+    
+    // Close styling context menu if user clicks off it
     let insideMenu = event.target.closest("#edit-menu");
 
     if (insideMenu === null) {
       setEditMenu();
     }
 
+    // Check whether user has clicked valid graph element and then select it 
     let targetType = isNodeOrLink(event.target);
 
     if (targetType && selected != event.target) {
@@ -58,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedType = targetType;
     } 
     
+    // Deselect previous element if user clicks off it
     else if (selected && !insideMenu) {
       deselect(selected, selectedType, previousColour);
       selected = null;
@@ -65,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Change node or link colour within styling context menu
   selectedColour.addEventListener('input', () => {
     let newColour = selectedColour.value;
 
@@ -76,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  // Change node size within styling context menu (this is the slider input which syncs with the numeric input below)
   selectedNodeSizeSlider.addEventListener('input', () => {
     let newSize = selectedNodeSizeSlider.value;
     
@@ -86,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  // Change node size within styling context menu (this is the numeric input which syncs with the slider input above)
   selectedNodeSizeNumeric.addEventListener('input', () => {
     let newSize = parseFloat(selectedNodeSizeNumeric.value);
     
@@ -96,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  // Change the colours of the links attached to a node
   selectedNodeLinkColour.addEventListener('input', () => {
     if (isNodeOrLink(selected) === "n") {
       let node = d3.select(selected);
@@ -107,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  // Reset to default button within the styling context menu
   selectedDefaultButton.addEventListener('click', () => {
     if (isNodeOrLink(selected) === "n") {
       selectedColour.value = "#12ffb9";
@@ -122,6 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedNodeLinkColour.dispatchEvent(new Event("input"));
   })
 
+  // Function to disable certain input elements, depending on the element currently selected
+  // (Only the colours of links can be styled so the other inputs are disabled)
   function setDisabled() {
     if (isNodeOrLink(selected) === "l") {
       selectedNodeSizeSlider.setAttribute("disabled", true);
@@ -142,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Set the edit menu to the position of the cursor
   function setEditMenu(display = '', x = 0, y = 0) {
     editMenu.style.display = display;
     editMenu.style.left = x + 'px';
@@ -149,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
+// Reveals the styling options in the navbar
 function toggleDropdown() {
   const styleOptions = document.getElementById('style-options');
   const arrow = document.getElementById('drop-arrow');
@@ -161,6 +181,7 @@ function toggleDropdown() {
   }
 }
 
+// Utilised within the styling in the navbar to apply style to all elements
 function applyStyles() {
   nodeColour = document.getElementById("all-node-colour").value;
   linkColour = document.getElementById("all-link-colour").value;
@@ -169,6 +190,7 @@ function applyStyles() {
   d3.selectAll(".link").style("stroke", linkColour);
 }
 
+// Change the node / link style if it is selected
 function selectNodeOrLink(target, type) {
   if (type === "n") {
     target.style.stroke = "yellow";
@@ -178,6 +200,7 @@ function selectNodeOrLink(target, type) {
   }
 }
 
+// Change back the node / link style if it is deslected
 function deselect(target, type, prev) {
   if (type === "n") {
     target.style.stroke = prev;
@@ -187,6 +210,7 @@ function deselect(target, type, prev) {
   }
 }
 
+// Used for determining whether the target is a node or link
 function isNodeOrLink(target) {
   const targetClasses = target.classList;
 
