@@ -10,6 +10,8 @@ async function renderNetwork(user, fetchLimit) {
 
   let networksData = [];
 
+  console.log(userNetworks);
+
   if (userNetworks.length > 0) {
     networksData = await Promise.all(
       userNetworks.map(async (network) => {
@@ -17,7 +19,8 @@ async function renderNetwork(user, fetchLimit) {
           Node.find({ _id: { $in: network.nodes } }),
           Link.find({ _id: { $in: network.links } })
         ]);
-
+        
+        console.log(nodes);
         return { nodes, links }; 
       })
     );      

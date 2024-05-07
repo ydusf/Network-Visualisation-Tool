@@ -42,7 +42,6 @@ function setupMetrics(svg, nodes, links) {
     const avgDegree = d3.mean(nodes, d => d.links.length);
     const maxNode = nodes.reduce((a, b) => a.links.length > b.links.length ? a : b);
     const clustCoeff = clusteringCoefficient(networkData[0]);
-    console.log(clustCoeff);
     let editOperations = 0;
     let cosineValue = 0;
     if(networkData.length > 1) {

@@ -80,7 +80,6 @@ async function breadthFirstTraversal(start, end, links, nodes, link, node, timer
         styleTraversedPath(node, link, prevNode, curNodeId, start._id, end._id, '#3357FF', 'red');
 
         if (curNodeId === end._id) {
-          console.log('FOUND');
           found = true;
           const [shortestPath, avgDegree] = traverseShortestPath(node, link, nodes, prevNode, curNodeId, start._id, end._id);
           return {shouldContinue: !found, shortestPath, avgDegree};

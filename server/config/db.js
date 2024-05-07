@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-// const User = require('../models/UserModel');
-// const Link = require('../models/LinkModel');
-// const Node = require('../models/NodeModel');
-// const Network = require('../models/NetworkModel');
+const User = require('../models/UserModel');
+const Link = require('../models/LinkModel');
+const Node = require('../models/NodeModel');
+const Network = require('../models/NetworkModel');
 
 const connectDB = async () => {
   try {
